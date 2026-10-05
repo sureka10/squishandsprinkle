@@ -18,11 +18,11 @@ function save(){
   renderCart();
 }
 
-/* NORMAL PRODUCTS */
+/* ADD PRODUCTS */
 function add(id){
   const p=products.find(x=>x.id===id);
 
-  // Custom Squishy gets customization choices
+  // Custom Squishy
   if(id===2){
     customizeSquishy();
     return;
@@ -44,27 +44,31 @@ function add(id){
 function customizeSquishy(){
 
   const color=prompt(
-    "🎨 Choose a color for your Custom Squishy:\n\nPink, Purple, Blue, Yellow, Green, White, Orange, or another color"
+    "🎨 Choose a color:\n\nPink\nPurple\nBlue\nYellow\nGreen\nWhite\nOrange"
   );
 
   if(!color){
     return;
   }
 
-  const air=confirm(
-    "💨 Would you like AIR?\n\nOK = Air\nCancel = No Air"
-  )
-  ? "Air"
-  : "No Air";
+  const airChoice=prompt(
+    "💨 Choose one:\n\nAir\nNo Air"
+  );
 
-  const charms=confirm(
-    "✨ Would you like MINI CHARMS?\n\nOK = Mini Charms\nCancel = No Mini Charms"
-  )
-  ? "Mini Charms"
-  : "No Mini Charms";
+  if(!airChoice){
+    return;
+  }
+
+  const charmsChoice=prompt(
+    "✨ Choose one:\n\nMini Charms\nNo Mini Charms"
+  );
+
+  if(!charmsChoice){
+    return;
+  }
 
   const customItem={
-    id:"custom-"+Date.now(),
+    id:Date.now(),
     baseId:2,
     name:"Custom Squishy",
     price:10,
@@ -72,8 +76,8 @@ function customizeSquishy(){
     qty:1,
     customization:{
       color:color,
-      air:air,
-      charms:charms
+      air:airChoice,
+      charms:charmsChoice
     }
   };
 
@@ -81,7 +85,7 @@ function customizeSquishy(){
 
   save();
 
-  toast("Custom Squishy added to your cart! 🎀");
+  toast("Custom Squishy added! 🎀");
 }
 
 /* CHANGE QUANTITY */
@@ -171,7 +175,7 @@ function renderCart(){
           x.customization
           ?
           `
-          <div style="font-size:13px;margin-top:5px;">
+          <div>
             🎨 Color: ${x.customization.color}<br>
             💨 ${x.customization.air}<br>
             ✨ ${x.customization.charms}
@@ -184,7 +188,7 @@ function renderCart(){
 
       <div class="qty">
 
-        <button onclick="change('${x.id}',-1)">
+        <button onclick="change(${x.id},-1)">
           −
         </button>
 
@@ -192,7 +196,7 @@ function renderCart(){
           ${x.qty}
         </span>
 
-        <button onclick="change('${x.id}',1)">
+        <button onclick="change(${x.id},1)">
           +
         </button>
 
