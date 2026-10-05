@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Squish & Sprinkle | Handmade Squishies</title>
+<meta name="description" content="Cute handmade squishies from Squish & Sprinkle.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="logo" href="#home"><span>☁️</span> Squish & Sprinkle</a>
+  <nav>
+    <a href="#shop">Shop</a>
+    <a href="#about">About</a>
+    <button class="cart-btn" id="cartButton">🛒 Cart <span id="cartCount">0</span></button>
+  </nav>
+</header>
+
+<main>
+<section class="hero" id="home">
+  <div class="hero-copy">
+    <p class="eyebrow">♡ handmade • cute • squishy ♡</p>
+    <h1>Little squishies,<br><span>big smiles.</span></h1>
+    <p>Sweet, soft, handmade squishies in all your favorite pastel colors.</p>
+    <a class="primary" href="#shop">Shop the squishies ✨</a>
+  </div>
+  <div class="hero-art" aria-label="Pastel squishy illustration">
+    <div class="cloud">☁️</div>
+    <div class="squish strawberry">🍓</div>
+    <div class="squish donut">🍩</div>
+    <div class="sparkles">✦　♡　✦</div>
+  </div>
+</section>
+
+<section class="section" id="shop">
+  <div class="section-heading">
+    <p class="eyebrow">♡ shop ♡</p>
+    <h2>Pick your squish!</h2>
+    <p>These are starter products. Replace the names, prices, and photos with your real squishies before launching.</p>
+  </div>
+  <div class="products" id="products"></div>
+</section>
+
+<section class="about" id="about">
+  <div>
+    <p class="eyebrow">♡ about us ♡</p>
+    <h2>Made with a little extra love.</h2>
+    <p>Squish & Sprinkle is a tiny handmade shop creating cheerful squishies for people who love cute things. Every squishy is made with care and packed up with lots of happy vibes.</p>
+  </div>
+  <div class="about-card">🌷<br><strong>Handmade</strong><br>Each one is unique!</div>
+  <div class="about-card">🎀<br><strong>Pastel</strong><br>Soft & sweet colors</div>
+  <div class="about-card">💌<br><strong>Packed with care</strong><br>Made for gifting</div>
+</section>
+
+<section class="section launch">
+  <div class="launch-box">
+    <p class="eyebrow">♡ almost ready ♡</p>
+    <h2>Have a squishy idea?</h2>
+    <p>Once your first products are ready, add your real photos and connect a payment provider with your dad's help.</p>
+    <a class="secondary" href="#shop">See the shop</a>
+  </div>
+</section>
+</main>
+
+<div class="cart-overlay" id="cartOverlay">
+  <aside class="cart-panel">
+    <button class="close" id="closeCart">×</button>
+    <h2>Your cart 🛒</h2>
+    <div id="cartItems"></div>
+    <div class="cart-total"><span>Total</span><strong id="cartTotal">$0.00</strong></div>
+    <button class="primary full" id="checkoutButton">Checkout</button>
+    <p class="tiny">Payment is not connected yet. Your dad can connect a real payment provider before launch.</p>
+  </aside>
+</div>
+
+<div class="checkout-overlay" id="checkoutOverlay">
+  <div class="checkout-card">
+    <button class="close" id="closeCheckout">×</button>
+    <p class="eyebrow">♡ checkout ♡</p>
+    <h2>Almost squish time!</h2>
+    <form id="checkoutForm">
+      <label>Full name<input required name="name" placeholder="Your name"></label>
+      <label>Email<input required type="email" name="email" placeholder="you@example.com"></label>
+      <label>Shipping address<textarea required name="address" placeholder="Shipping address"></textarea></label>
+      <div class="checkout-summary"><span>Order total</span><strong id="checkoutTotal">$0.00</strong></div>
+      <button class="primary full" type="submit">Place order</button>
+      <p class="tiny">Demo checkout: no card information is collected here. Connect a real payment processor before accepting orders.</p>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<footer>© 2026 Squish & Sprinkle · Handmade with ♡</footer>
+<script src="script.js"></script>
+</body>
+</html>
