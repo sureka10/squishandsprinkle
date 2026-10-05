@@ -1,607 +1,260 @@
-const products = [
-  {
-    id: 1,
-    name: "Rice Squishy",
-    price: 6,
-    emoji: "🍚",
-    art: "p1",
-    desc: "A cute handmade rice squishy."
-  },
-  {
-    id: 2,
-    name: "Custom Squishy",
-    price: 10,
-    emoji: "🎨",
-    art: "p2",
-    desc: "Make it yours! Choose the color, air, and mini charms."
-  },
-  {
-    id: 3,
-    name: "Keychain Fidget",
-    price: 2,
-    emoji: "🔑",
-    art: "p3",
-    desc: "A tiny fidget you can take anywhere."
-  },
-  {
-    id: 4,
-    name: "Custom Fidget",
-    price: 7,
-    emoji: "✨",
-    art: "p4",
-    desc: "A handmade custom fidget made your way."
-  }
+const products=[
+{id:1,name:"Rice Squishy",price:6,emoji:"🍚",art:"p1",desc:"A cute handmade rice squishy."},
+{id:2,name:"Custom Squishy",price:10,emoji:"🎨",art:"p2",desc:"A custom squishy made just for you."},
+{id:3,name:"Keychain Fidget",price:2,emoji:"🔑",art:"p3",desc:"A tiny fidget you can take anywhere."},
+{id:4,name:"Custom Fidget",price:7,emoji:"✨",art:"p4",desc:"A handmade custom fidget made your way."}
 ];
 
-let cart = [];
+let cart=JSON.parse(localStorage.getItem("squishCart")||"[]");
 
-/* =========================
-   SAVE / LOAD CART
-========================= */
+const $=id=>document.getElementById(id);
 
-function saveCart() {
-  localStorage.setItem("squishSprinkleCart", JSON.stringify(cart));
+function money(n){
+  return "$"+n.toFixed(2);
 }
 
-function loadCart() {
-  const savedCart = localStorage.getItem("squishSprinkleCart");
+function save(){
+  localStorage.setItem("squishCart",JSON.stringify(cart));
+  renderCart();
+}
 
-  if (savedCart) {
-    try {
-      cart = JSON.parse(savedCart);
-    } catch (error) {
-      cart = [];
-    }
+/* NORMAL PRODUCTS */
+function add(id){
+  const p=products.find(x=>x.id===id);
+
+  // Custom Squishy gets customization choices
+  if(id===2){
+    customizeSquishy();
+    return;
   }
+
+  const item=cart.find(x=>x.id===id);
+
+  if(item){
+    item.qty++;
+  }else{
+    cart.push({...p,qty:1});
+  }
+
+  save();
+  toast("Added to your cart! 💕");
 }
 
-/* =========================
-   SHOP
-========================= */
+/* CUSTOM SQUISHY */
+function customizeSquishy(){
 
-function setupShop() {
-  const productsContainer = document.getElementById("products");
+  const color=prompt(
+    "🎨 Choose a color for your Custom Squishy:\n\nPink, Purple, Blue, Yellow, Green, White, Orange, or another color"
+  );
 
-  if (!productsContainer) return;
+  if(!color){
+    return;
+  }
 
-  productsContainer.innerHTML = "";
+  const air=confirm(
+    "💨 Would you like AIR?\n\nOK = Air\nCancel = No Air"
+  )
+  ? "Air"
+  : "No Air";
 
-  products.forEach((product) => {
-    const card = document.createElement("div");
+  const charms=confirm(
+    "✨ Would you like MINI CHARMS?\n\nOK = Mini Charms\nCancel = No Mini Charms"
+  )
+  ? "Mini Charms"
+  : "No Mini Charms";
 
-    card.className = "product-card";
+  const customItem={
+    id:"custom-"+Date.now(),
+    baseId:2,
+    name:"Custom Squishy",
+    price:10,
+    emoji:"🎨",
+    qty:1,
+    customization:{
+      color:color,
+      air:air,
+      charms:charms
+    }
+  };
 
-    card.innerHTML = `
-      <div class="product-image ${product.art}">
-        <span class="product-emoji">${product.emoji}</span>
-      </div>
+  cart.push(customItem);
 
-      <h3>${product.name}</h3>
+  save();
 
-      <p>${product.desc}</p>
-
-      <strong>$${product.price.toFixed(2)}</strong>
-
-      <button class="primary full product-button">
-        ${product.id === 2 ? "Customize 💕" : "Add to Cart 🛒"}
-      </button>
-    `;
-
-    const button = card.querySelector(".product-button");
-
-    button.addEventListener("click", () => {
-      if (product.id === 2) {
-        openCustomizer();
-      } else {
-        addProductToCart(product);
-      }
-    });
-
-    productsContainer.appendChild(card);
-  });
+  toast("Custom Squishy added to your cart! 🎀");
 }
 
-/* =========================
-   NORMAL PRODUCTS
-========================= */
+/* CHANGE QUANTITY */
+function change(id,delta){
 
-function addProductToCart(product) {
-  cart.push({
-    cartId: Date.now() + Math.random(),
-    productId: product.id,
-    name: product.name,
-    price: product.price,
-    quantity: 1
-  });
+  const item=cart.find(x=>x.id===id);
 
-  saveCart();
-  updateCart();
+  if(!item)return;
 
-  showToast(`${product.name} added to your cart! 💕`);
+  item.qty+=delta;
+
+  if(item.qty<=0){
+    cart=cart.filter(x=>x.id!==id);
+  }
+
+  save();
 }
 
-/* =========================
-   CUSTOM SQUISHY
-========================= */
+/* PRODUCTS */
+function renderProducts(){
 
-function openCustomizer() {
-  const overlay = document.createElement("div");
+  $("products").innerHTML=products.map(p=>`
 
-  overlay.id = "customizerOverlay";
+    <article class="product">
 
-  overlay.style.cssText = `
-    position: fixed;
-    inset: 0;
-    background: rgba(60, 40, 70, 0.45);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    padding: 20px;
-  `;
-
-  overlay.innerHTML = `
-    <div style="
-      background: #fffafd;
-      width: 100%;
-      max-width: 450px;
-      max-height: 90vh;
-      overflow-y: auto;
-      border-radius: 28px;
-      padding: 28px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.2);
-      font-family: inherit;
-      position: relative;
-    ">
-
-      <button id="closeCustomizer" style="
-        position: absolute;
-        right: 18px;
-        top: 12px;
-        border: none;
-        background: none;
-        font-size: 30px;
-        cursor: pointer;
-      ">×</button>
-
-      <p style="
-        text-align:center;
-        margin:0 0 5px;
-        font-weight:bold;
-      ">♡ CUSTOM SQUISHY ♡</p>
-
-      <h2 style="
-        text-align:center;
-        margin:0 0 8px;
-      ">Make it yours! 🎨</h2>
-
-      <p style="
-        text-align:center;
-        margin-bottom:24px;
-      ">
-        Everything below is included in the <strong>$10</strong> price!
-      </p>
-
-      <label style="display:block; margin-bottom:8px; font-weight:bold;">
-        🎨 Choose a color
-      </label>
-
-      <select id="customColor" style="
-        width:100%;
-        padding:12px;
-        border-radius:12px;
-        border:2px solid #ead9ed;
-        margin-bottom:20px;
-        font-size:16px;
-      ">
-        <option value="Pink">🌸 Pink</option>
-        <option value="Purple">💜 Purple</option>
-        <option value="Blue">💙 Blue</option>
-        <option value="Yellow">💛 Yellow</option>
-        <option value="Green">💚 Green</option>
-        <option value="White">🤍 White</option>
-        <option value="Rainbow">🌈 Rainbow</option>
-        <option value="Custom">🎨 Other / Custom Color</option>
-      </select>
-
-      <div style="margin-bottom:20px;">
-        <strong>💨 Air</strong>
-
-        <label style="display:block; margin-top:10px;">
-          <input type="radio" name="customAir" value="Air" checked>
-          Air
-        </label>
-
-        <label style="display:block; margin-top:8px;">
-          <input type="radio" name="customAir" value="No Air">
-          No Air
-        </label>
+      <div class="product-art ${p.art}">
+        ${p.emoji}
       </div>
 
-      <div style="margin-bottom:24px;">
-        <strong>✨ Mini charms</strong>
+      <h3>${p.name}</h3>
 
-        <label style="display:block; margin-top:10px;">
-          <input type="radio" name="customCharms" value="Mini Charms" checked>
-          Mini charms
-        </label>
+      <p>${p.desc}</p>
 
-        <label style="display:block; margin-top:8px;">
-          <input type="radio" name="customCharms" value="No Mini Charms">
-          No mini charms
-        </label>
+      <div class="product-bottom">
+
+        <span class="price">
+          ${money(p.price)}
+        </span>
+
+        <button class="add" onclick="add(${p.id})">
+          ${p.id===2 ? "Customize 💕" : "Add +"}
+        </button>
+
       </div>
 
-      <button id="addCustomSquishy" class="primary full" style="
-        width:100%;
-        padding:14px;
-        border:none;
-        border-radius:14px;
-        cursor:pointer;
-        font-size:17px;
-        font-weight:bold;
-      ">
-        Add Custom Squishy — $10 💕
-      </button>
+    </article>
+
+  `).join("");
+}
+
+/* CART */
+function renderCart(){
+
+  const count=cart.reduce(
+    (s,x)=>s+x.qty,
+    0
+  );
+
+  $("cartCount").textContent=count;
+
+  const total=cart.reduce(
+    (s,x)=>s+x.price*x.qty,
+    0
+  );
+
+  $("cartTotal").textContent=money(total);
+
+  $("checkoutTotal").textContent=money(total);
+
+  $("cartItems").innerHTML=cart.length
+
+  ?cart.map(x=>`
+
+    <div class="cart-item">
+
+      <div>
+
+        <strong>
+          ${x.emoji} ${x.name}
+        </strong>
+
+        <div>
+          ${money(x.price)} each
+        </div>
+
+        ${
+          x.customization
+          ?
+          `
+          <div style="font-size:13px;margin-top:5px;">
+            🎨 Color: ${x.customization.color}<br>
+            💨 ${x.customization.air}<br>
+            ✨ ${x.customization.charms}
+          </div>
+          `
+          :""
+        }
+
+      </div>
+
+      <div class="qty">
+
+        <button onclick="change('${x.id}',-1)">
+          −
+        </button>
+
+        <span>
+          ${x.qty}
+        </span>
+
+        <button onclick="change('${x.id}',1)">
+          +
+        </button>
+
+      </div>
 
     </div>
-  `;
 
-  document.body.appendChild(overlay);
+  `).join("")
 
-  document
-    .getElementById("closeCustomizer")
-    .addEventListener("click", () => {
-      overlay.remove();
-    });
+  :`<p>Your cart is empty. Add a squishy to get started! 🧸</p>`;
 
-  overlay.addEventListener("click", (event) => {
-    if (event.target === overlay) {
-      overlay.remove();
-    }
-  });
-
-  document
-    .getElementById("addCustomSquishy")
-    .addEventListener("click", () => {
-      const color = document.getElementById("customColor").value;
-
-      const air = document.querySelector(
-        'input[name="customAir"]:checked'
-      ).value;
-
-      const charms = document.querySelector(
-        'input[name="customCharms"]:checked'
-      ).value;
-
-      let finalColor = color;
-
-      if (color === "Custom") {
-        const customColor = prompt(
-          "What color would you like?"
-        );
-
-        if (!customColor) {
-          return;
-        }
-
-        finalColor = customColor;
-      }
-
-      cart.push({
-        cartId: Date.now() + Math.random(),
-        productId: 2,
-        name: "Custom Squishy",
-        price: 10,
-        quantity: 1,
-        customization: {
-          color: finalColor,
-          air: air,
-          charms: charms
-        }
-      });
-
-      saveCart();
-      updateCart();
-
-      overlay.remove();
-
-      showToast("Your custom squishy was added! 🎀");
-    });
+  $("checkoutButton").disabled=!cart.length;
 }
 
-/* =========================
-   CART
-========================= */
+/* TOAST */
+function toast(msg){
 
-function updateCart() {
-  const cartCount = document.getElementById("cartCount");
-  const cartItems = document.getElementById("cartItems");
-  const cartTotal = document.getElementById("cartTotal");
-  const checkoutTotal = document.getElementById("checkoutTotal");
+  const t=$("toast");
 
-  const totalItems = cart.reduce(
-    (total, item) => total + item.quantity,
-    0
+  t.textContent=msg;
+
+  t.classList.add("show");
+
+  setTimeout(
+    ()=>t.classList.remove("show"),
+    1800
   );
+}
 
-  const totalPrice = cart.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
+/* CART BUTTON */
+$("cartButton").onclick=()=>{
+  $("cartOverlay").classList.add("open");
+};
+
+$("closeCart").onclick=()=>{
+  $("cartOverlay").classList.remove("open");
+};
+
+/* CHECKOUT */
+$("checkoutButton").onclick=()=>{
+
+  if(!cart.length)return;
+
+  $("cartOverlay").classList.remove("open");
+
+  $("checkoutOverlay").classList.add("open");
+};
+
+$("closeCheckout").onclick=()=>{
+  $("checkoutOverlay").classList.remove("open");
+};
+
+/* CHECKOUT FORM */
+$("checkoutForm").onsubmit=e=>{
+
+  e.preventDefault();
+
+  alert(
+    "This is a demo checkout. No payment was taken. Your dad will need to connect a real payment processor before launch."
   );
-
-  if (cartCount) {
-    cartCount.textContent = totalItems;
-  }
-
-  if (cartTotal) {
-    cartTotal.textContent = `$${totalPrice.toFixed(2)}`;
-  }
-
-  if (checkoutTotal) {
-    checkoutTotal.textContent = `$${totalPrice.toFixed(2)}`;
-  }
-
-  if (!cartItems) return;
-
-  if (cart.length === 0) {
-    cartItems.innerHTML = `
-      <div style="text-align:center; padding:30px 10px;">
-        <div style="font-size:45px;">🛒</div>
-        <p>Your cart is empty!</p>
-        <p>Go pick a cute squishy. 💕</p>
-      </div>
-    `;
-
-    return;
-  }
-
-  cartItems.innerHTML = "";
-
-  cart.forEach((item) => {
-    const cartItem = document.createElement("div");
-
-    cartItem.className = "cart-item";
-
-    let customizationHTML = "";
-
-    if (item.customization) {
-      customizationHTML = `
-        <div style="
-          font-size:14px;
-          margin-top:8px;
-          line-height:1.6;
-        ">
-          🎨 Color: ${item.customization.color}<br>
-          💨 ${item.customization.air}<br>
-          ✨ ${item.customization.charms}
-        </div>
-      `;
-    }
-
-    cartItem.innerHTML = `
-      <div style="flex:1;">
-        <strong>${item.name}</strong>
-
-        ${customizationHTML}
-
-        <div style="margin-top:8px;">
-          $${item.price.toFixed(2)}
-        </div>
-
-        <div style="
-          display:flex;
-          align-items:center;
-          gap:8px;
-          margin-top:10px;
-        ">
-          <button class="quantity-button decrease">−</button>
-
-          <span>${item.quantity}</span>
-
-          <button class="quantity-button increase">+</button>
-        </div>
-      </div>
-
-      <button class="remove-button">
-        Remove
-      </button>
-    `;
-
-    cartItem
-      .querySelector(".decrease")
-      .addEventListener("click", () => {
-        changeQuantity(item.cartId, -1);
-      });
-
-    cartItem
-      .querySelector(".increase")
-      .addEventListener("click", () => {
-        changeQuantity(item.cartId, 1);
-      });
-
-    cartItem
-      .querySelector(".remove-button")
-      .addEventListener("click", () => {
-        removeFromCart(item.cartId);
-      });
-
-    cartItems.appendChild(cartItem);
-  });
-}
-
-/* =========================
-   QUANTITY
-========================= */
-
-function changeQuantity(cartId, amount) {
-  const item = cart.find((product) => product.cartId === cartId);
-
-  if (!item) return;
-
-  item.quantity += amount;
-
-  if (item.quantity <= 0) {
-    cart = cart.filter((product) => product.cartId !== cartId);
-  }
-
-  saveCart();
-  updateCart();
-}
-
-/* =========================
-   REMOVE
-========================= */
-
-function removeFromCart(cartId) {
-  cart = cart.filter((item) => item.cartId !== cartId);
-
-  saveCart();
-  updateCart();
-
-  showToast("Item removed from your cart.");
-}
-
-/* =========================
-   CART OPEN / CLOSE
-========================= */
-
-function openCart() {
-  const cartOverlay = document.getElementById("cartOverlay");
-
-  if (cartOverlay) {
-    cartOverlay.classList.add("open");
-  }
-}
-
-function closeCart() {
-  const cartOverlay = document.getElementById("cartOverlay");
-
-  if (cartOverlay) {
-    cartOverlay.classList.remove("open");
-  }
-}
-
-/* =========================
-   CHECKOUT
-========================= */
-
-function openCheckout() {
-  if (cart.length === 0) {
-    showToast("Your cart is empty! 🛒");
-    return;
-  }
-
-  const checkoutOverlay =
-    document.getElementById("checkoutOverlay");
-
-  if (checkoutOverlay) {
-    checkoutOverlay.classList.add("open");
-  }
-}
-
-function closeCheckout() {
-  const checkoutOverlay =
-    document.getElementById("checkoutOverlay");
-
-  if (checkoutOverlay) {
-    checkoutOverlay.classList.remove("open");
-  }
-}
-
-/* =========================
-   TOAST
-========================= */
-
-function showToast(message) {
-  const toast = document.getElementById("toast");
-
-  if (!toast) return;
-
-  toast.textContent = message;
-  toast.classList.add("show");
-
-  setTimeout(() => {
-    toast.classList.remove("show");
-  }, 2500);
-}
-
-/* =========================
-   CHECKOUT FORM
-========================= */
-
-function setupCheckout() {
-  const form = document.getElementById("checkoutForm");
-
-  if (!form) return;
-
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
-
-    if (cart.length === 0) {
-      showToast("Your cart is empty!");
-      return;
-    }
-
-    const formData = new FormData(form);
-
-    const customerName = formData.get("name");
-
-    alert(
-      `Thank you, ${customerName}! 💕\n\n` +
-      `Your order has been received as a demo order.\n\n` +
-      `Payment is not connected yet.`
-    );
-
-    cart = [];
-
-    saveCart();
-    updateCart();
-
-    form.reset();
-
-    closeCheckout();
-    closeCart();
-  });
-}
-
-/* =========================
-   START EVERYTHING
-========================= */
-
-document.addEventListener("DOMContentLoaded", () => {
-  loadCart();
-  setupShop();
-  setupCheckout();
-  updateCart();
-
-  const cartButton = document.getElementById("cartButton");
-
-  if (cartButton) {
-    cartButton.addEventListener("click", openCart);
-  }
-
-  const closeCartButton =
-    document.getElementById("closeCart");
-
-  if (closeCartButton) {
-    closeCartButton.addEventListener("click", closeCart);
-  }
-
-  const checkoutButton =
-    document.getElementById("checkoutButton");
-
-  if (checkoutButton) {
-    checkoutButton.addEventListener("click", openCheckout);
-  }
-
-  const closeCheckoutButton =
-    document.getElementById("closeCheckout");
-
-  if (closeCheckoutButton) {
-    closeCheckoutButton.addEventListener(
-      "click",
-      closeCheckout
-    );
-  }
-});
+};
+
+/* START */
+renderProducts();
+renderCart();
