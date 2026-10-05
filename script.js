@@ -4,7 +4,7 @@ const products=[
 {id:3,name:"Keychain Fidget",price:2,emoji:"🔑",art:"p3",desc:"A tiny fidget you can take anywhere."},
 {id:4,name:"Custom Fidget",price:6,emoji:"✨",art:"p4",desc:"Choose your color and fidget style."},
 {id:5,name:"Balloon Squishy",price:7,emoji:"🎈",art:"p5",desc:"A cute handmade balloon squishy."},
-{id:6,name:"DIY Dumpling",price:8,emoji:"🥟",art:"p6",desc:"A cool DIY dumpling squishy."}
+{id:6,name:"DIY Dumpling",price:8,emoji:"🥟",art:"p6",desc:"A fun DIY dumpling squishy."}
 ];
 
 let cart=JSON.parse(localStorage.getItem("squishCart")||"[]");
