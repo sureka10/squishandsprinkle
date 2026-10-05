@@ -2,7 +2,9 @@ const products=[
 {id:1,name:"Rice Squishy",price:6,emoji:"🍚",art:"p1",desc:"A cute handmade rice squishy."},
 {id:2,name:"Custom Squishy",price:10,emoji:"🎨",art:"p2",desc:"A custom squishy made just for you."},
 {id:3,name:"Keychain Fidget",price:2,emoji:"🔑",art:"p3",desc:"A tiny fidget you can take anywhere."},
-{id:4,name:"Custom Fidget",price:7,emoji:"✨",art:"p4",desc:"A handmade custom fidget made your way."}
+{id:4,name:"Custom Fidget",price:6,emoji:"✨",art:"p4",desc:"Choose your color and fidget style."},
+{id:5,name:"Balloon Squishy",price:7,emoji:"🎈",art:"p5",desc:"A cute handmade balloon squishy."},
+{id:6,name:"DIY Dumpling",price:8,emoji:"🥟",art:"p6",desc:"A fun DIY dumpling squishy kit."}
 ];
 
 let cart=JSON.parse(localStorage.getItem("squishCart")||"[]");
@@ -20,11 +22,18 @@ function save(){
 
 /* ADD PRODUCTS */
 function add(id){
+
   const p=products.find(x=>x.id===id);
 
-  // Custom Squishy
+  /* CUSTOM SQUISHY */
   if(id===2){
     customizeSquishy();
+    return;
+  }
+
+  /* CUSTOM FIDGET */
+  if(id===4){
+    customizeFidget();
     return;
   }
 
@@ -37,6 +46,7 @@ function add(id){
   }
 
   save();
+
   toast("Added to your cart! 💕");
 }
 
@@ -88,6 +98,64 @@ function customizeSquishy(){
   toast("Custom Squishy added! 🎀");
 }
 
+/* CUSTOM FIDGET */
+function customizeFidget(){
+
+  const color=prompt(
+    "🎨 What color would you like for your Custom Fidget?\n\nYou can choose ANY color!"
+  );
+
+  if(!color){
+    return;
+  }
+
+  const type=prompt(
+    "✨ Choose your fidget type:\n\n1. Keychain\n2. Sliding Marble Fidget"
+  );
+
+  if(!type){
+    return;
+  }
+
+  let fidgetType;
+
+  if(
+    type==="1" ||
+    type.toLowerCase()==="keychain"
+  ){
+    fidgetType="Keychain";
+  }
+  else if(
+    type==="2" ||
+    type.toLowerCase()==="sliding marble fidget"
+  ){
+    fidgetType="Sliding Marble Fidget";
+  }
+  else{
+    alert("Please choose Keychain or Sliding Marble Fidget.");
+    return;
+  }
+
+  const customItem={
+    id:Date.now(),
+    baseId:4,
+    name:"Custom Fidget",
+    price:6,
+    emoji:"✨",
+    qty:1,
+    customization:{
+      color:color,
+      type:fidgetType
+    }
+  };
+
+  cart.push(customItem);
+
+  save();
+
+  toast("Custom Fidget added! ✨");
+}
+
 /* CHANGE QUANTITY */
 function change(id,delta){
 
@@ -126,7 +194,13 @@ function renderProducts(){
         </span>
 
         <button class="add" onclick="add(${p.id})">
-          ${p.id===2 ? "Customize 💕" : "Add +"}
+          ${
+            p.id===2
+            ? "Customize 💕"
+            : p.id===4
+            ? "Customize ✨"
+            : "Add +"
+          }
         </button>
 
       </div>
@@ -176,9 +250,29 @@ function renderCart(){
           ?
           `
           <div>
-            🎨 Color: ${x.customization.color}<br>
-            💨 ${x.customization.air}<br>
-            ✨ ${x.customization.charms}
+            ${
+              x.customization.color
+              ? `🎨 Color: ${x.customization.color}<br>`
+              : ""
+            }
+
+            ${
+              x.customization.air
+              ? `💨 ${x.customization.air}<br>`
+              : ""
+            }
+
+            ${
+              x.customization.charms
+              ? `✨ ${x.customization.charms}<br>`
+              : ""
+            }
+
+            ${
+              x.customization.type
+              ? `🫧 Type: ${x.customization.type}`
+              : ""
+            }
           </div>
           `
           :""
