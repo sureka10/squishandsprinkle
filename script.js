@@ -7,7 +7,8 @@ const products=[
 {id:6,name:"DIY Dumpling",price:8,emoji:"🥟",art:"p6",desc:"A fun DIY dumpling squishy."}
 ];
 
-let cart=JSON.parse(localStorage.getItem("squishCart")||"[]");
+let cart=[];
+localStorage.removeItem("squishCart");
 
 const $=id=>document.getElementById(id);
 
