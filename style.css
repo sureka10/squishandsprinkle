@@ -1,1 +1,517 @@
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:#594b60;background:#fffafd;font-family:"Quicksand",sans-serif}.site-header{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:16px 6%;background:rgba(255,250,253,.94);backdrop-filter:blur(12px);border-bottom:1px solid #f2dce9}.logo{font:700 1.25rem "Fredoka";color:#6b5470;text-decoration:none}.logo span{font-size:1.4rem}.site-header nav{display:flex;align-items:center;gap:22px}.site-header nav a{color:#6b5470;text-decoration:none;font-weight:700}.cart-btn,.primary,.secondary{border:0;border-radius:999px;padding:12px 20px;font:700 1rem "Quicksand";cursor:pointer;text-decoration:none;display:inline-block}.cart-btn{background:#f7d8e8;color:#604c5e}.cart-btn span{background:#fff;padding:2px 7px;border-radius:20px}.hero{min-height:650px;padding:70px 8%;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:40px;background:linear-gradient(135deg,#fff5fb,#f3f5ff 55%,#fff8ed)}.eyebrow{text-transform:lowercase;letter-spacing:.08em;color:#b4789b;font-weight:700}.hero h1{font:700 clamp(3.3rem,7vw,6.5rem)/.92 "Fredoka";margin:15px 0;color:#66536d}.hero h1 span{color:#d786ac}.hero-copy>p:not(.eyebrow){font-size:1.15rem;line-height:1.7;max-width:530px;margin-bottom:30px}.primary{background:#d88caf;color:white;box-shadow:0 8px 20px #d88caf55}.secondary{background:#fff;color:#8d6680;border:2px solid #efcadd}.hero-art{height:430px;position:relative}.squish{position:absolute;display:grid;place-items:center;width:190px;height:160px;border-radius:42% 58% 50% 50%;font-size:6rem;box-shadow:inset -10px -12px 0 #00000009,0 20px 35px #b58da333;transform:rotate(-7deg)}.strawberry{left:12%;top:32%;background:#ffd7e5}.donut{right:7%;top:48%;background:#dce7ff;transform:rotate(8deg)}.cloud{position:absolute;right:14%;top:7%;font-size:8rem;filter:drop-shadow(0 12px 15px #bba4c044)}.sparkles{position:absolute;bottom:7%;left:15%;color:#e5a5c3;font-size:2rem}.section{padding:90px 8%}.section-heading{text-align:center;max-width:720px;margin:0 auto 45px}.section-heading h2,.about h2,.launch h2{font:700 2.7rem "Fredoka";margin:8px 0;color:#66536d}.section-heading p:not(.eyebrow),.about p{line-height:1.7}.products{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}.product{background:white;border:1px solid #f0dce7;border-radius:28px;padding:15px;box-shadow:0 10px 30px #9f78901a;transition:.2s}.product:hover{transform:translateY(-5px)}.product-art{height:220px;border-radius:22px;display:grid;place-items:center;font-size:6rem}.p1{background:#ffe3ed}.p2{background:#e7e4ff}.p3{background:#fff0cf}.p4{background:#ddf3eb}.product h3{font:600 1.35rem "Fredoka";margin:16px 5px 5px}.product p{margin:5px;color:#817282;min-height:45px}.product-bottom{display:flex;justify-content:space-between;align-items:center;margin:15px 5px 5px}.price{font-weight:700;color:#bf6f97;font-size:1.15rem}.add{border:0;background:#f8dce9;color:#704e62;border-radius:15px;padding:10px 13px;font-weight:700;cursor:pointer}.about{padding:80px 8%;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:18px;background:#faf4ff}.about-card{text-align:center;background:white;border-radius:24px;padding:25px;font-size:1.05rem;line-height:1.6;border:1px solid #eadff2}.about-card:first-letter{font-size:2rem}.launch{text-align:center}.launch-box{max-width:750px;margin:auto;padding:55px 25px;border-radius:35px;background:#fff0f6;border:1px solid #f0cadc}.cart-overlay,.checkout-overlay{display:none;position:fixed;inset:0;background:#4c3b4d66;z-index:20;justify-content:flex-end}.cart-overlay.open,.checkout-overlay.open{display:flex}.cart-panel{width:min(430px,100%);height:100%;background:#fffafd;padding:30px;overflow:auto}.checkout-overlay{justify-content:center;align-items:center;padding:20px}.checkout-card{position:relative;width:min(500px,100%);background:white;border-radius:30px;padding:35px}.close{position:absolute;right:20px;top:16px;border:0;background:none;font-size:2rem;color:#96788d;cursor:pointer}.cart-item{display:grid;grid-template-columns:1fr auto;gap:8px;padding:15px 0;border-bottom:1px solid #f0dce7}.qty{display:flex;align-items:center;gap:7px}.qty button{border:0;background:#f7e5ee;border-radius:8px;width:27px;height:27px;cursor:pointer}.cart-total,.checkout-summary{display:flex;justify-content:space-between;padding:20px 0;font-size:1.2rem}.full{width:100%}.tiny{font-size:.78rem;color:#927f8d;line-height:1.5}.checkout-card label{display:block;font-weight:700;margin:15px 0}.checkout-card input,.checkout-card textarea{display:block;width:100%;margin-top:7px;padding:13px;border:1px solid #e8d5e1;border-radius:13px;font:inherit}.checkout-card textarea{min-height:90px;resize:vertical}.toast{position:fixed;bottom:25px;left:50%;transform:translateX(-50%) translateY(20px);background:#604c5e;color:white;padding:12px 20px;border-radius:999px;opacity:0;pointer-events:none;transition:.25s;z-index:30}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}footer{text-align:center;padding:35px;color:#9b8292;background:#fff1f7}@media(max-width:900px){.hero{grid-template-columns:1fr;text-align:center}.hero-copy>p:not(.eyebrow){margin-left:auto;margin-right:auto}.hero-art{max-width:550px;width:100%;margin:auto}.products{grid-template-columns:repeat(2,1fr)}.about{grid-template-columns:1fr 1fr}.about>div:first-child{grid-column:1/-1}}@media(max-width:600px){.site-header{padding:13px 4%}.site-header nav a{display:none}.hero{padding:55px 6%;min-height:auto}.hero-art{height:330px}.squish{width:145px;height:125px;font-size:4.5rem}.cloud{font-size:6rem}.section{padding:65px 6%}.products{grid-template-columns:1fr}.about{grid-template-columns:1fr;padding:60px 6%}.about>div:first-child{grid-column:auto}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+
+body{
+  margin:0;
+  color:#594b60;
+  background:#fff9fc;
+  font-family:"Quicksand",sans-serif;
+}
+
+/* HEADER */
+.site-header{
+  position:sticky;
+  top:0;
+  z-index:10;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:16px 6%;
+  background:rgba(255,249,252,.94);
+  backdrop-filter:blur(12px);
+  border-bottom:2px solid #f4ddea;
+}
+
+.logo{
+  font:700 1.25rem "Fredoka";
+  color:#6b5470;
+  text-decoration:none;
+}
+
+.logo span{font-size:1.4rem}
+
+.site-header nav{
+  display:flex;
+  align-items:center;
+  gap:22px;
+}
+
+.site-header nav a{
+  color:#6b5470;
+  text-decoration:none;
+  font-weight:700;
+}
+
+.cart-btn,.primary,.secondary{
+  border:0;
+  border-radius:999px;
+  padding:12px 20px;
+  font:700 1rem "Quicksand";
+  cursor:pointer;
+  text-decoration:none;
+  display:inline-block;
+}
+
+.cart-btn{
+  background:#f8d8ea;
+  color:#604c5e;
+}
+
+.cart-btn span{
+  background:white;
+  padding:2px 7px;
+  border-radius:20px;
+}
+
+/* HERO */
+.hero{
+  min-height:650px;
+  padding:70px 8%;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  align-items:center;
+  gap:40px;
+
+  background:
+    radial-gradient(circle at 10% 20%,#ffe8f3 0 70px,transparent 71px),
+    radial-gradient(circle at 90% 80%,#e8e5ff 0 90px,transparent 91px),
+    linear-gradient(135deg,#fff6fb,#f5f2ff 50%,#fff9ed);
+}
+
+.eyebrow{
+  text-transform:lowercase;
+  letter-spacing:.08em;
+  color:#b4789b;
+  font-weight:700;
+}
+
+.hero h1{
+  font:700 clamp(3.3rem,7vw,6.5rem)/.92 "Fredoka";
+  margin:15px 0;
+  color:#66536d;
+}
+
+.hero h1 span{color:#d786ac}
+
+.hero-copy>p:not(.eyebrow){
+  font-size:1.15rem;
+  line-height:1.7;
+  max-width:530px;
+  margin-bottom:30px;
+}
+
+.primary{
+  background:linear-gradient(135deg,#e7a2c2,#c9b9ed);
+  color:white;
+  box-shadow:0 8px 20px #d88caf44;
+}
+
+.secondary{
+  background:#fff;
+  color:#8d6680;
+  border:2px solid #efcadd;
+}
+
+/* HERO DECORATIONS */
+.hero-art{
+  height:430px;
+  position:relative;
+}
+
+.squish{
+  position:absolute;
+  display:grid;
+  place-items:center;
+  width:190px;
+  height:160px;
+  border-radius:42% 58% 50% 50%;
+  font-size:6rem;
+  box-shadow:inset -10px -12px 0 #00000009,0 20px 35px #b58da333;
+  transform:rotate(-7deg);
+}
+
+.strawberry{
+  left:12%;
+  top:32%;
+  background:#ffd7e5;
+}
+
+.donut{
+  right:7%;
+  top:48%;
+  background:#dce7ff;
+  transform:rotate(8deg);
+}
+
+.cloud{
+  position:absolute;
+  right:14%;
+  top:7%;
+  font-size:8rem;
+  filter:drop-shadow(0 12px 15px #bba4c044);
+}
+
+.sparkles{
+  position:absolute;
+  bottom:7%;
+  left:15%;
+  color:#e5a5c3;
+  font-size:2rem;
+}
+
+/* SHOP */
+.section{
+  padding:90px 8%;
+  background:#fff9fc;
+}
+
+.section-heading{
+  text-align:center;
+  max-width:720px;
+  margin:0 auto 45px;
+}
+
+.section-heading h2,.about h2,.launch h2{
+  font:700 2.7rem "Fredoka";
+  margin:8px 0;
+  color:#66536d;
+}
+
+.section-heading p:not(.eyebrow),.about p{
+  line-height:1.7;
+}
+
+/* PRODUCT CARDS */
+.products{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:22px;
+}
+
+.product{
+  background:rgba(255,255,255,.9);
+  border:2px solid #f1ddea;
+  border-radius:28px;
+  padding:15px;
+  box-shadow:0 10px 30px #9f78901a;
+  transition:.2s;
+}
+
+.product:hover{
+  transform:translateY(-6px);
+  box-shadow:0 16px 35px #9f78902b;
+}
+
+/*
+  IMPORTANT:
+  These product-art colors are intentionally different.
+  Your actual squishies can be ANY colors!
+*/
+.product-art{
+  height:220px;
+  border-radius:22px;
+  display:grid;
+  place-items:center;
+  font-size:6rem;
+}
+
+.p1{background:#ffe3ed}
+.p2{background:#e7e4ff}
+.p3{background:#fff0cf}
+.p4{background:#ddf3eb}
+
+/* New products */
+.p5{background:#ffe0e8}
+.p6{background:#fff0d9}
+
+.product h3{
+  font:600 1.35rem "Fredoka";
+  margin:16px 5px 5px;
+}
+
+.product p{
+  margin:5px;
+  color:#817282;
+  min-height:45px;
+}
+
+.product-bottom{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:15px 5px 5px;
+}
+
+.price{
+  font-weight:700;
+  color:#bf6f97;
+  font-size:1.15rem;
+}
+
+.add{
+  border:0;
+  background:#f8dce9;
+  color:#704e62;
+  border-radius:15px;
+  padding:10px 13px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.add:hover{
+  background:#efd0e1;
+}
+
+/* ABOUT */
+.about{
+  padding:80px 8%;
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:18px;
+
+  background:
+    radial-gradient(circle at 15% 30%,#f8dff0 0 70px,transparent 71px),
+    radial-gradient(circle at 85% 70%,#e4e1fa 0 80px,transparent 81px),
+    #faf5ff;
+}
+
+.about-card{
+  text-align:center;
+  background:rgba(255,255,255,.9);
+  border-radius:24px;
+  padding:25px;
+  font-size:1.05rem;
+  line-height:1.6;
+  border:2px solid #eadff2;
+}
+
+.about-card:first-letter{font-size:2rem}
+
+/* LAUNCH */
+.launch{
+  text-align:center;
+  background:#fff9fc;
+}
+
+.launch-box{
+  max-width:750px;
+  margin:auto;
+  padding:55px 25px;
+  border-radius:35px;
+
+  background:linear-gradient(135deg,#fff0f7,#f2efff);
+  border:2px solid #f0cadc;
+}
+
+/* CART + CHECKOUT */
+.cart-overlay,.checkout-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#4c3b4d66;
+  z-index:20;
+  justify-content:flex-end;
+}
+
+.cart-overlay.open,.checkout-overlay.open{
+  display:flex;
+}
+
+.cart-panel{
+  width:min(430px,100%);
+  height:100%;
+  background:#fffafd;
+  padding:30px;
+  overflow:auto;
+}
+
+.checkout-overlay{
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+
+.checkout-card{
+  position:relative;
+  width:min(500px,100%);
+  background:white;
+  border-radius:30px;
+  padding:35px;
+}
+
+.close{
+  position:absolute;
+  right:20px;
+  top:16px;
+  border:0;
+  background:none;
+  font-size:2rem;
+  color:#96788d;
+  cursor:pointer;
+}
+
+.cart-item{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:8px;
+  padding:15px 0;
+  border-bottom:1px solid #f0dce7;
+}
+
+.qty{
+  display:flex;
+  align-items:center;
+  gap:7px;
+}
+
+.qty button{
+  border:0;
+  background:#f7e5ee;
+  border-radius:8px;
+  width:27px;
+  height:27px;
+  cursor:pointer;
+}
+
+.cart-total,.checkout-summary{
+  display:flex;
+  justify-content:space-between;
+  padding:20px 0;
+  font-size:1.2rem;
+}
+
+.full{width:100%}
+
+.tiny{
+  font-size:.78rem;
+  color:#927f8d;
+  line-height:1.5;
+}
+
+.checkout-card label{
+  display:block;
+  font-weight:700;
+  margin:15px 0;
+}
+
+.checkout-card input,.checkout-card textarea{
+  display:block;
+  width:100%;
+  margin-top:7px;
+  padding:13px;
+  border:1px solid #e8d5e1;
+  border-radius:13px;
+  font:inherit;
+}
+
+.checkout-card textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+/* TOAST */
+.toast{
+  position:fixed;
+  bottom:25px;
+  left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:#604c5e;
+  color:white;
+  padding:12px 20px;
+  border-radius:999px;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:30;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+/* FOOTER */
+footer{
+  text-align:center;
+  padding:35px;
+  color:#9b8292;
+  background:#fff0f7;
+}
+
+/* TABLET */
+@media(max-width:900px){
+  .hero{
+    grid-template-columns:1fr;
+    text-align:center;
+  }
+
+  .hero-copy>p:not(.eyebrow){
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  .hero-art{
+    max-width:550px;
+    width:100%;
+    margin:auto;
+  }
+
+  .products{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .about{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .about>div:first-child{
+    grid-column:1/-1;
+  }
+}
+
+/* PHONE */
+@media(max-width:600px){
+  .site-header{
+    padding:13px 4%;
+  }
+
+  .site-header nav a{
+    display:none;
+  }
+
+  .hero{
+    padding:55px 6%;
+    min-height:auto;
+  }
+
+  .hero-art{
+    height:330px;
+  }
+
+  .squish{
+    width:145px;
+    height:125px;
+    font-size:4.5rem;
+  }
+
+  .cloud{
+    font-size:6rem;
+  }
+
+  .section{
+    padding:65px 6%;
+  }
+
+  .products{
+    grid-template-columns:1fr;
+  }
+
+  .about{
+    grid-template-columns:1fr;
+    padding:60px 6%;
+  }
+
+  .about>div:first-child{
+    grid-column:auto;
+  }
+}
