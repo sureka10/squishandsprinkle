@@ -679,4 +679,188 @@ footer {
     animation-duration: 0.01ms !important;
   }
 }
-body { background: #ff00ff !important; }
+
+/* ===================================
+   SQUISH & SPRINKLE
+   Soft, simple boutique makeover
+   =================================== */
+
+body {
+  background: #fffaf8 !important;
+  color: #655568;
+  font-family: "Quicksand", sans-serif;
+}
+
+.site-header {
+  padding: 18px 6%;
+  background: rgba(255, 250, 248, 0.97);
+  border-bottom: 1px solid #f0e3e9;
+  box-shadow: 0 4px 18px rgba(100, 75, 95, 0.05);
+}
+
+.logo {
+  color: #745b78;
+  font-size: 1.4rem;
+}
+
+.site-header nav a {
+  color: #745b78;
+}
+
+.hero {
+  min-height: 560px;
+  padding: 75px 7%;
+  background: linear-gradient(
+    135deg,
+    #fff8f7,
+    #f8f3ff 55%,
+    #fff5f0
+  );
+  gap: 55px;
+}
+
+.hero h1 {
+  font-size: clamp(3.2rem, 6vw, 5.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+}
+
+.hero-copy > p:not(.eyebrow) {
+  color: #776a7b;
+  font-size: 1.12rem;
+  line-height: 1.8;
+}
+
+.primary {
+  background: linear-gradient(120deg, #dca1bc, #bfaee4);
+  border-radius: 999px;
+  padding: 15px 25px;
+  box-shadow: 0 7px 18px #d9bfd533;
+}
+
+.primary:hover {
+  filter: brightness(1.04);
+}
+
+.section {
+  padding: 85px 7%;
+  background: #fffaf8;
+}
+
+.section-heading {
+  margin-bottom: 42px;
+}
+
+.section-heading h2,
+.about h2,
+.launch h2 {
+  color: #745b78;
+  font-size: clamp(2.2rem, 4vw, 3rem);
+}
+
+.section-heading p:not(.eyebrow) {
+  color: #8d7f8d;
+}
+
+.products {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 26px;
+}
+
+.product {
+  background: #fff;
+  border: 1px solid #f0e5eb;
+  border-radius: 24px;
+  padding: 13px;
+  box-shadow: 0 7px 24px rgba(100, 75, 95, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 13px 30px rgba(100, 75, 95, 0.11);
+}
+
+.product-art {
+  height: 215px;
+  border-radius: 17px;
+  font-size: 5.2rem;
+}
+
+.product h3 {
+  color: #6e5872;
+  font-size: 1.35rem;
+}
+
+.product p {
+  color: #887c8b;
+  line-height: 1.65;
+}
+
+.price {
+  color: #b66f93;
+  font-size: 1.2rem;
+}
+
+.add {
+  border-radius: 999px;
+  padding: 11px 16px;
+  background: #f7e5ee;
+  color: #704f67;
+}
+
+.add:hover {
+  background: #efd0e0;
+}
+
+.about {
+  background: linear-gradient(135deg, #faf5ff, #fff5f7);
+  gap: 20px;
+}
+
+.about-card {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid #eee2f0;
+  border-radius: 22px;
+  box-shadow: 0 6px 20px rgba(100, 75, 95, 0.04);
+}
+
+.launch-box {
+  background: linear-gradient(135deg, #fff0f6, #f2edff);
+  border: 1px solid #efdeeb;
+  border-radius: 28px;
+  box-shadow: 0 8px 25px rgba(100, 75, 95, 0.06);
+}
+
+.cart-panel,
+.checkout-card {
+  background: #fffaf8;
+  border-color: #f0e3e9;
+  border-radius: 24px;
+}
+
+footer {
+  background: #fff0f5;
+  color: #886f84;
+  padding: 35px 20px;
+}
+
+@media (max-width: 900px) {
+  .products {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .products {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    padding: 50px 6%;
+  }
+
+  .section {
+    padding: 60px 6%;
+  }
+}
