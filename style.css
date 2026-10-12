@@ -515,3 +515,318 @@ footer{
     grid-column:auto;
   }
 }
+
+/* ==================================
+   SQUISH & SPRINKLE
+   Soft & Simple Boutique Makeover
+   ================================== */
+
+:root {
+  --cream: #fffaf7;
+  --white: #ffffff;
+  --blush: #f5dce6;
+  --pink: #d99ab5;
+  --lavender: #eee9f8;
+  --plum: #67566d;
+  --muted: #887b89;
+  --border: #f0e4e9;
+  --soft-shadow: 0 8px 28px rgba(103, 86, 109, 0.07);
+}
+
+/* Overall look */
+body {
+  background: var(--cream);
+  color: var(--plum);
+  letter-spacing: 0.01em;
+}
+
+::selection {
+  background: #f3d7e4;
+  color: #59445a;
+}
+
+/* Header */
+.site-header {
+  background: rgba(255, 250, 247, 0.96);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 3px 18px rgba(103, 86, 109, 0.035);
+}
+
+.logo {
+  letter-spacing: -0.025em;
+}
+
+.site-header nav a {
+  transition: color 0.2s ease;
+}
+
+.site-header nav a:hover {
+  color: var(--pink);
+}
+
+/* Buttons */
+.cart-btn,
+.primary,
+.secondary,
+.add {
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.cart-btn {
+  background: var(--blush);
+}
+
+.cart-btn:hover,
+.add:hover {
+  background: #f0cbdc;
+  transform: translateY(-2px);
+}
+
+.primary {
+  background: linear-gradient(135deg, #dba5bc, #c8b8e5);
+  box-shadow: 0 5px 16px rgba(188, 145, 177, 0.17);
+}
+
+.primary:hover {
+  box-shadow: 0 8px 22px rgba(188, 145, 177, 0.25);
+  transform: translateY(-2px);
+}
+
+.secondary {
+  border: 1px solid #ead5e1;
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.secondary:hover {
+  background: #fff2f7;
+}
+
+/* Homepage hero */
+.hero {
+  background:
+    radial-gradient(
+      circle at 8% 18%,
+      rgba(250, 225, 237, 0.7) 0 55px,
+      transparent 56px
+    ),
+    radial-gradient(
+      circle at 92% 84%,
+      rgba(231, 224, 248, 0.65) 0 75px,
+      transparent 76px
+    ),
+    linear-gradient(135deg, #fffaf7, #fbf7ff 58%, #fff8f2);
+}
+
+.eyebrow {
+  color: #b17d99;
+}
+
+.hero h1 {
+  letter-spacing: -0.035em;
+}
+
+.hero h1 span {
+  color: #cf8eae;
+}
+
+/* Emoji decorations stay exactly as they are */
+.squish {
+  box-shadow:
+    inset -8px -9px 0 rgba(0, 0, 0, 0.025),
+    0 14px 28px rgba(103, 86, 109, 0.09);
+}
+
+/* Shop section */
+.section {
+  background: var(--cream);
+}
+
+.section-heading h2,
+.about h2,
+.launch h2 {
+  letter-spacing: -0.025em;
+}
+
+.section-heading p:not(.eyebrow) {
+  color: var(--muted);
+}
+
+/* Product cards */
+.products {
+  gap: 24px;
+}
+
+.product {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 25px;
+  padding: 14px;
+  box-shadow: var(--soft-shadow);
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
+}
+
+.product:hover {
+  transform: translateY(-4px);
+  border-color: #e9d2df;
+  box-shadow: 0 14px 32px rgba(103, 86, 109, 0.10);
+}
+
+/* Keep emoji artwork and its individual colors */
+.product-art {
+  border-radius: 19px;
+  font-size: 5.5rem;
+}
+
+.product h3 {
+  color: var(--plum);
+  letter-spacing: -0.01em;
+}
+
+.product p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.price {
+  color: #b77596;
+}
+
+.add {
+  background: #f8e6ee;
+  color: #725467;
+  border-radius: 13px;
+}
+
+/* About section */
+.about {
+  background:
+    radial-gradient(
+      circle at 12% 25%,
+      rgba(247, 221, 237, 0.65) 0 55px,
+      transparent 56px
+    ),
+    linear-gradient(135deg, #faf6ff, #fff9f6);
+}
+
+.about-card {
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid #ebe2ef;
+  border-radius: 22px;
+  box-shadow: 0 5px 20px rgba(103, 86, 109, 0.035);
+}
+
+/* Bottom call-to-action section */
+.launch {
+  background: var(--cream);
+}
+
+.launch-box {
+  background: linear-gradient(135deg, #fff0f6, #f4f0fc);
+  border: 1px solid #f0dce7;
+  box-shadow: var(--soft-shadow);
+}
+
+/* Cart */
+.cart-overlay,
+.checkout-overlay {
+  background: rgba(67, 52, 67, 0.42);
+  backdrop-filter: blur(3px);
+}
+
+.cart-panel {
+  background: #fffaf8;
+  box-shadow: -8px 0 30px rgba(67, 52, 67, 0.07);
+}
+
+.cart-item {
+  border-bottom-color: var(--border);
+}
+
+.qty button {
+  background: #f7e5ee;
+  transition: background 0.2s ease;
+}
+
+.qty button:hover {
+  background: #edcbdc;
+}
+
+/* Checkout panel */
+.checkout-card {
+  border: 1px solid var(--border);
+  border-radius: 25px;
+  box-shadow: 0 18px 55px rgba(67, 52, 67, 0.13);
+}
+
+.close {
+  border-radius: 50%;
+  transition: background 0.2s ease;
+}
+
+.close:hover {
+  background: #f9e9f0;
+}
+
+.checkout-card input,
+.checkout-card textarea {
+  background: #fffdfc;
+  border-color: #eadde5;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.checkout-card input:focus,
+.checkout-card textarea:focus {
+  border-color: #cf9eb8;
+  box-shadow: 0 0 0 3px rgba(207, 158, 184, 0.15);
+}
+
+/* Small notification */
+.toast {
+  background: #69566d;
+  box-shadow: 0 6px 20px rgba(67, 52, 67, 0.15);
+}
+
+/* Footer */
+footer {
+  background: #fff1f6;
+  color: #907b8c;
+}
+
+/* Keep the design comfortable on phones */
+@media (max-width: 600px) {
+  .site-header {
+    padding: 13px 4%;
+  }
+
+  .product {
+    padding: 13px;
+  }
+
+  .product-art {
+    height: 205px;
+  }
+
+  .checkout-card {
+    padding: 28px 22px;
+  }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
