@@ -1,7 +1,5 @@
 
-// ==========================================
-// SQUISH & SPRINKLE - COMPLETE SHOP SCRIPT
-// ==========================================
+const GIFT_PRICE = 2;
 
 const products = [
   { id: 1, name: "Custom Squishy", price: 10, emoji: "🎨", description: "Make your own squishy!" },
@@ -20,7 +18,6 @@ try {
   cart = [];
 }
 
-// Remove any old products that are no longer sold
 cart = cart.filter(item => products.some(p => p.id === item.id));
 
 function saveCart() {
@@ -31,162 +28,127 @@ function money(amount) {
   return "$" + Number(amount).toFixed(2);
 }
 
-// ==========================================
-// STYLES FOR CLICKABLE CUSTOMIZATION BUTTONS
-// ==========================================
+// STYLES
 
 const extraStyles = document.createElement("style");
 extraStyles.textContent = `
-  .customizer {
-    position: fixed;
-    inset: 0;
-    background: rgba(45, 30, 50, .55);
-    z-index: 99999;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-  }
+.customizer {
+  position: fixed;
+  inset: 0;
+  background: rgba(45,30,50,.55);
+  z-index: 99999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.customizer.show { display: flex; }
 
-  .customizer.show {
-    display: flex;
-  }
+.customizer-box {
+  background: #fffaff;
+  border-radius: 22px;
+  padding: 24px;
+  width: 100%;
+  max-width: 390px;
+  max-height: 85vh;
+  overflow-y: auto;
+  color: #55445c;
+  font-family: inherit;
+}
 
-  .customizer-box {
-    background: #fffaff;
-    border-radius: 22px;
-    padding: 24px;
-    width: 100%;
-    max-width: 390px;
-    max-height: 85vh;
-    overflow-y: auto;
-    box-shadow: 0 10px 40px #0002;
-    font-family: inherit;
-    color: #55445c;
-  }
+.customizer-box h2 { color: #a66cae; margin-top: 0; }
+.customizer-box h3 { font-size: 15px; margin: 18px 0 9px; }
 
-  .customizer-box h2 {
-    margin-top: 0;
-    color: #a66cae;
-  }
+.choice-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
 
-  .customizer-box h3 {
-    font-size: 15px;
-    margin: 18px 0 9px;
-  }
+.choice-btn {
+  border: 2px solid #ead8ef;
+  background: white;
+  color: #59485f;
+  border-radius: 14px;
+  padding: 10px 13px;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: inherit;
+}
 
-  .choice-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
+.choice-btn.selected {
+  background: #f1dafa;
+  border-color: #bd8bc9;
+  font-weight: bold;
+}
 
-  .choice-btn {
-    border: 2px solid #ead8ef;
-    background: #fff;
-    color: #59485f;
-    border-radius: 14px;
-    padding: 10px 13px;
-    cursor: pointer;
-    font-size: 14px;
-    font-family: inherit;
-  }
+.customizer-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 22px;
+}
 
-  .choice-btn.selected {
-    background: #f1dafa;
-    border-color: #bd8bc9;
-    font-weight: bold;
-  }
+.customizer-actions button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: bold;
+}
 
-  .customizer-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 22px;
-  }
+.custom-add { background: #d9b8e8; color: #49344f; }
+.custom-cancel { background: #f1eaf3; color: #59485f; }
 
-  .customizer-actions button {
-    flex: 1;
-    padding: 12px;
-    border: none;
-    border-radius: 14px;
-    cursor: pointer;
-    font-size: 15px;
-    font-weight: bold;
-  }
+.product-card {
+  background: #fffaff;
+  border-radius: 20px;
+  padding: 16px;
+  text-align: center;
+  box-shadow: 0 4px 15px #8e6b9912;
+}
 
-  .custom-add {
-    background: #d9b8e8;
-    color: #49344f;
-  }
+.product-emoji {
+  font-size: 48px;
+  background: #f8edf9;
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 12px;
+}
 
-  .custom-cancel {
-    background: #f1eaf3;
-    color: #59485f;
-  }
+.product-card button {
+  border: none;
+  border-radius: 14px;
+  padding: 11px 17px;
+  background: #e8cbed;
+  color: #59415f;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+}
 
-  .product-card {
-    background: #fffaff;
-    border-radius: 20px;
-    padding: 16px;
-    text-align: center;
-    box-shadow: 0 4px 15px #8e6b9912;
-  }
+.cart-line {
+  padding: 12px 0;
+  border-bottom: 1px solid #eee2ef;
+}
 
-  .product-emoji {
-    font-size: 48px;
-    background: #f8edf9;
-    border-radius: 16px;
-    padding: 18px;
-    margin-bottom: 12px;
-  }
-
-  .product-card h3 {
-    margin: 8px 0;
-  }
-
-  .product-card p {
-    margin: 6px 0;
-  }
-
-  .product-card button {
-    border: none;
-    border-radius: 14px;
-    padding: 11px 17px;
-    background: #e8cbed;
-    color: #59415f;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 10px;
-  }
-
-  .cart-line {
-    padding: 12px 0;
-    border-bottom: 1px solid #eee2ef;
-  }
-
-  .cart-line button {
-    margin-left: 8px;
-    cursor: pointer;
-  }
-
-  #squishToast {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #72547d;
-    color: white;
-    padding: 12px 20px;
-    border-radius: 20px;
-    z-index: 100001;
-    display: none;
-  }
+#squishToast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #72547d;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 20px;
+  z-index: 100001;
+  display: none;
+}
 `;
 document.head.appendChild(extraStyles);
 
-// ==========================================
-// PRODUCT DISPLAY
-// ==========================================
+// SHOW PRODUCTS
 
 function renderProducts() {
   const container = document.getElementById("products");
@@ -203,23 +165,44 @@ function renderProducts() {
   `).join("");
 }
 
-// ==========================================
-// CUSTOMIZATION POP-UP WITH CLICKABLE BUTTONS
-// ==========================================
+// CUSTOMIZATION WINDOW
 
 let selectedProduct = null;
 let selections = {};
+
+function choiceButtons(key, choices) {
+  return `
+    <div class="choice-grid">
+      ${choices.map(choice => `
+        <button type="button"
+          class="choice-btn"
+          onclick="selectChoice('${key}', '${choice.replace(/'/g, "\\'")}', this)">
+          ${choice}
+        </button>
+      `).join("")}
+    </div>
+  `;
+}
+
+function selectChoice(key, value, button) {
+  selections[key] = value;
+
+  button.parentElement.querySelectorAll(".choice-btn")
+    .forEach(btn => btn.classList.remove("selected"));
+
+  button.classList.add("selected");
+}
 
 function openCustomizer(id) {
   selectedProduct = products.find(p => p.id === id);
   if (!selectedProduct) return;
 
-  selections = {};
+  selections = { gift: "No thanks" };
 
   let options = "";
 
   if (id === 1) {
-    options = `
+    options += `
       <h3>🎨 Choose a color</h3>
       ${choiceButtons("color", ["Pink", "Purple", "Blue", "Green", "Yellow", "Red", "Orange", "Black", "White", "Surprise me!"])}
 
@@ -232,7 +215,7 @@ function openCustomizer(id) {
   }
 
   if (id === 3) {
-    options = `
+    options += `
       <h3>🎨 Choose a color</h3>
       ${choiceButtons("color", ["Pink", "Purple", "Blue", "Green", "Yellow", "Red", "Orange", "Black", "White", "Surprise me!"])}
 
@@ -242,16 +225,23 @@ function openCustomizer(id) {
   }
 
   if (id === 4) {
-    options = `
+    options += `
       <h3>🎈 Choose your filling</h3>
       ${choiceButtons("filling", ["Soft Kinetic Sand", "Gel", "Water"])}
     `;
   }
 
+  options += `
+    <h3>🎁 Gift packaging (optional)</h3>
+    <p>Make your order extra special!</p>
+    ${choiceButtons("gift", ["No thanks", "Yes, gift packaging (+$2)"])}
+  `;
+
   const modal = document.getElementById("squishCustomizer");
+
   modal.innerHTML = `
     <div class="customizer-box" onclick="event.stopPropagation()">
-      <h2>${selectedProduct.emoji} Customize Your ${selectedProduct.name}</h2>
+      <h2>${selectedProduct.emoji} ${selectedProduct.name}</h2>
       ${options}
       <div class="customizer-actions">
         <button class="custom-cancel" onclick="closeCustomizer()">Cancel</button>
@@ -261,36 +251,20 @@ function openCustomizer(id) {
   `;
 
   modal.classList.add("show");
-}
 
-function choiceButtons(key, choices) {
-  return `
-    <div class="choice-grid">
-      ${choices.map(choice => `
-        <button
-          type="button"
-          class="choice-btn"
-          onclick="selectChoice('${key}', '${choice.replace(/'/g, "\\'")}', this)"
-        >${choice}</button>
-      `).join("")}
-    </div>
-  `;
-}
-
-function selectChoice(key, value, button) {
-  selections[key] = value;
-
-  const group = button.parentElement;
-  group.querySelectorAll(".choice-btn").forEach(btn => {
-    btn.classList.remove("selected");
-  });
-
-  button.classList.add("selected");
+  // Select "No thanks" by default
+  const giftButtons = modal.querySelectorAll(".choice-grid");
+  const giftGroup = giftButtons[giftButtons.length - 1];
+  if (giftGroup && giftGroup.children[0]) {
+    giftGroup.children[0].classList.add("selected");
+  }
 }
 
 function closeCustomizer() {
   document.getElementById("squishCustomizer").classList.remove("show");
 }
+
+// ADD CUSTOMIZED PRODUCT
 
 function finishCustomization() {
   if (!selectedProduct) return;
@@ -301,18 +275,23 @@ function finishCustomization() {
     4: ["filling"]
   };
 
-  const missing = (required[selectedProduct.id] || []).filter(key => !selections[key]);
+  const missing = (required[selectedProduct.id] || [])
+    .filter(key => !selections[key]);
 
   if (missing.length) {
     showToast("Please choose all the options first! 💗");
     return;
   }
 
+  const gift = selections.gift === "Yes, gift packaging (+$2)";
+
   cart.push({
     id: selectedProduct.id,
     name: selectedProduct.name,
-    price: selectedProduct.price,
     emoji: selectedProduct.emoji,
+    price: selectedProduct.price + (gift ? GIFT_PRICE : 0),
+    basePrice: selectedProduct.price,
+    gift: gift,
     customizations: { ...selections }
   });
 
@@ -322,38 +301,15 @@ function finishCustomization() {
   showToast("Added to your cart! 💗");
 }
 
-// ==========================================
-// ADD PRODUCTS TO CART
-// ==========================================
+// ADD TO CART
 
 function add(id) {
-  const product = products.find(p => p.id === id);
-  if (!product) return;
-
-  if ([1, 3, 4].includes(id)) {
-    openCustomizer(id);
-    return;
-  }
-
-  cart.push({
-    id: product.id,
-    name: product.name,
-    price: product.price,
-    emoji: product.emoji,
-    customizations: {}
-  });
-
-  saveCart();
-  updateCart();
-  showToast("Added to your cart! 💗");
+  openCustomizer(id);
 }
 
-// ==========================================
 // CART DISPLAY
-// ==========================================
 
 function updateCart() {
-  const count = cart.length;
   const total = cart.reduce((sum, item) => sum + item.price, 0);
 
   const countElement = document.getElementById("cartCount");
@@ -361,7 +317,7 @@ function updateCart() {
   const checkoutTotal = document.getElementById("checkoutTotal");
   const itemsElement = document.getElementById("cartItems");
 
-  if (countElement) countElement.textContent = count;
+  if (countElement) countElement.textContent = cart.length;
   if (totalElement) totalElement.textContent = money(total);
   if (checkoutTotal) checkoutTotal.textContent = money(total);
 
@@ -371,6 +327,7 @@ function updateCart() {
     } else {
       itemsElement.innerHTML = cart.map((item, index) => {
         const details = Object.entries(item.customizations || {})
+          .filter(([key]) => key !== "gift")
           .map(([key, value]) => `${key}: ${value}`)
           .join(" • ");
 
@@ -379,6 +336,7 @@ function updateCart() {
             <strong>${item.emoji} ${item.name}</strong>
             <span> - ${money(item.price)}</span>
             ${details ? `<p>${details}</p>` : ""}
+            <p>${item.gift ? "🎁 Gift packaging: +$2.00" : "Gift packaging: No"}</p>
             <button onclick="removeItem(${index})">Remove</button>
           </div>
         `;
@@ -394,9 +352,7 @@ function removeItem(index) {
   showToast("Removed from cart");
 }
 
-// ==========================================
-// CART AND CHECKOUT WINDOWS
-// ==========================================
+// CART WINDOWS
 
 function openCart() {
   const overlay = document.getElementById("cartOverlay");
@@ -437,9 +393,7 @@ function closeCheckoutWindow() {
   }
 }
 
-// ==========================================
 // TOAST MESSAGE
-// ==========================================
 
 function showToast(message) {
   let toast = document.getElementById("squishToast");
@@ -459,11 +413,19 @@ function showToast(message) {
   }, 2500);
 }
 
-// ==========================================
-// CONNECT WEBSITE BUTTONS
-// ==========================================
+// START WEBSITE
 
-document.addEventListener("DOMContentLoaded", () => {
+function initializeShop() {
+  const modal = document.createElement("div");
+  modal.id = "squishCustomizer";
+  modal.className = "customizer";
+
+  modal.addEventListener("click", event => {
+    if (event.target === modal) closeCustomizer();
+  });
+
+  document.body.appendChild(modal);
+
   renderProducts();
   updateCart();
 
@@ -495,24 +457,13 @@ document.addEventListener("DOMContentLoaded", () => {
   if (checkoutForm) {
     checkoutForm.addEventListener("submit", event => {
       event.preventDefault();
-      showToast("Checkout isn't connected to payments yet. Ask your dad to finish Stripe setup! 💗");
+      showToast("Payments aren't connected yet. Ask your dad to finish Stripe setup! 💗");
     });
   }
+}
 
-  // Create the customization window
-  const modal = document.createElement("div");
-  modal.id = "squishCustomizer";
-  modal.className = "customizer";
-  modal.addEventListener("click", event => {
-    if (event.target === modal) closeCustomizer();
-  });
-  document.body.appendChild(modal);
-});
-
-// Make functions available to the product buttons
 window.add = add;
 window.removeItem = removeItem;
-window.openCustomizer = openCustomizer;
 window.selectChoice = selectChoice;
 window.finishCustomization = finishCustomization;
 window.closeCustomizer = closeCustomizer;
@@ -520,3 +471,9 @@ window.openCart = openCart;
 window.closeCartWindow = closeCartWindow;
 window.openCheckout = openCheckout;
 window.closeCheckoutWindow = closeCheckoutWindow;
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initializeShop);
+} else {
+  initializeShop();
+}
