@@ -1,592 +1,522 @@
 
-/* SQUISH & SPRINKLE 🍡 */
+// ==========================================
+// SQUISH & SPRINKLE - COMPLETE SHOP SCRIPT
+// ==========================================
 
 const products = [
-  {id:2,name:"Custom Squishy",price:10,emoji:"🎨",art:"p2",desc:"A custom squishy made just for you."},
-  {id:3,name:"Keychain Fidget",price:2,emoji:"🔑",art:"p3",desc:"A tiny fidget you can take anywhere."},
-  {id:4,name:"Custom Fidget",price:6,emoji:"✨",art:"p4",desc:"Choose your color and fidget style."},
-  {id:5,name:"Balloon Squishy",price:7,emoji:"🎈",art:"p5",desc:"Choose your favorite balloon squishy filling."},
-  {id:6,name:"DIY Dumpling",price:8,emoji:"🥟",art:"p6",desc:"A fun DIY dumpling squishy."}
+  { id: 1, name: "Custom Squishy", price: 10, emoji: "🎨", description: "Make your own squishy!" },
+  { id: 2, name: "Keychain Fidget", price: 2, emoji: "🔑", description: "A tiny fidget to take anywhere!" },
+  { id: 3, name: "Custom Fidget", price: 6, emoji: "✨", description: "Choose your fidget style!" },
+  { id: 4, name: "Balloon Squishy", price: 7, emoji: "🎈", description: "Choose your favorite filling!" },
+  { id: 5, name: "DIY Dumpling", price: 8, emoji: "🥟", description: "A cute dumpling squishy!" }
 ];
 
-const $ = id => document.getElementById(id);
+let cart = [];
 
-function loadCart(){
-  try {
-    const saved = JSON.parse(localStorage.getItem("squishCart") || "[]");
-    if (!Array.isArray(saved)) return [];
-
-    return saved.filter(item =>
-      item &&
-      item.id !== 1 &&
-      item.baseId !== 1 &&
-      item.name !== "Rice Squishy"
-    );
-  } catch {
-    return [];
-  }
+try {
+  cart = JSON.parse(localStorage.getItem("squishCart") || "[]");
+  if (!Array.isArray(cart)) cart = [];
+} catch {
+  cart = [];
 }
 
-let cart = loadCart();
+// Remove any old products that are no longer sold
+cart = cart.filter(item => products.some(p => p.id === item.id));
 
-localStorage.setItem("squishCart", JSON.stringify(cart));
-
-function money(n){
-  return "$" + Number(n).toFixed(2);
-}
-
-function escapeHTML(value){
-  return String(value ?? "").replace(/[&<>"']/g, char => ({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#39;"
-  })[char]);
-}
-
-function save(){
+function saveCart() {
   localStorage.setItem("squishCart", JSON.stringify(cart));
-  renderCart();
 }
 
-/* CUSTOMIZATION BUTTON STYLES */
-
-const customStyles = document.createElement("style");
-
-customStyles.textContent = `
-.customizer-backdrop {
-  position:fixed;
-  inset:0;
-  background:rgba(35,20,40,.58);
-  z-index:99999;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:16px;
-  overflow-y:auto;
+function money(amount) {
+  return "$" + Number(amount).toFixed(2);
 }
 
-.customizer-box {
-  background:#fffafd;
-  color:#49394d;
-  width:100%;
-  max-width:440px;
-  max-height:90vh;
-  overflow-y:auto;
-  border-radius:24px;
-  padding:24px;
-  box-shadow:0 12px 45px rgba(0,0,0,.2);
-  font-family:inherit;
-}
+// ==========================================
+// STYLES FOR CLICKABLE CUSTOMIZATION BUTTONS
+// ==========================================
 
-.customizer-heading {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  margin-bottom:18px;
-}
+const extraStyles = document.createElement("style");
+extraStyles.textContent = `
+  .customizer {
+    position: fixed;
+    inset: 0;
+    background: rgba(45, 30, 50, .55);
+    z-index: 99999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
 
-.customizer-heading h2 {
-  margin:0;
-  font-size:23px;
-}
+  .customizer.show {
+    display: flex;
+  }
 
-.customizer-close {
-  border:0;
-  background:#f2e5f2;
-  border-radius:50%;
-  width:36px;
-  height:36px;
-  font-size:22px;
-  cursor:pointer;
-}
+  .customizer-box {
+    background: #fffaff;
+    border-radius: 22px;
+    padding: 24px;
+    width: 100%;
+    max-width: 390px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px #0002;
+    font-family: inherit;
+    color: #55445c;
+  }
 
-.customizer-section {
-  margin:20px 0;
-}
+  .customizer-box h2 {
+    margin-top: 0;
+    color: #a66cae;
+  }
 
-.customizer-section h3 {
-  font-size:16px;
-  margin:0 0 10px;
-}
+  .customizer-box h3 {
+    font-size: 15px;
+    margin: 18px 0 9px;
+  }
 
-.customizer-options {
-  display:flex;
-  flex-wrap:wrap;
-  gap:9px;
-}
+  .choice-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
 
-.choice-btn {
-  border:2px solid #eadbea;
-  background:white;
-  color:#59465e;
-  padding:10px 14px;
-  border-radius:15px;
-  cursor:pointer;
-  font-size:14px;
-  font-weight:600;
-}
+  .choice-btn {
+    border: 2px solid #ead8ef;
+    background: #fff;
+    color: #59485f;
+    border-radius: 14px;
+    padding: 10px 13px;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: inherit;
+  }
 
-.choice-btn.selected {
-  background:#ead8f0;
-  border-color:#9165a0;
-  color:#493052;
-}
+  .choice-btn.selected {
+    background: #f1dafa;
+    border-color: #bd8bc9;
+    font-weight: bold;
+  }
 
-.customizer-add {
-  width:100%;
-  border:0;
-  background:#a77db5;
-  color:white;
-  padding:15px;
-  border-radius:16px;
-  font-size:16px;
-  font-weight:bold;
-  cursor:pointer;
-  margin-top:12px;
-}
+  .customizer-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 22px;
+  }
 
-.customizer-add:disabled {
-  opacity:.45;
-  cursor:not-allowed;
-}
+  .customizer-actions button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+  }
 
-.customizer-note {
-  color:#806e84;
-  font-size:13px;
-  text-align:center;
-  margin-top:12px;
-}
+  .custom-add {
+    background: #d9b8e8;
+    color: #49344f;
+  }
+
+  .custom-cancel {
+    background: #f1eaf3;
+    color: #59485f;
+  }
+
+  .product-card {
+    background: #fffaff;
+    border-radius: 20px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: 0 4px 15px #8e6b9912;
+  }
+
+  .product-emoji {
+    font-size: 48px;
+    background: #f8edf9;
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 12px;
+  }
+
+  .product-card h3 {
+    margin: 8px 0;
+  }
+
+  .product-card p {
+    margin: 6px 0;
+  }
+
+  .product-card button {
+    border: none;
+    border-radius: 14px;
+    padding: 11px 17px;
+    background: #e8cbed;
+    color: #59415f;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+
+  .cart-line {
+    padding: 12px 0;
+    border-bottom: 1px solid #eee2ef;
+  }
+
+  .cart-line button {
+    margin-left: 8px;
+    cursor: pointer;
+  }
+
+  #squishToast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #72547d;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 20px;
+    z-index: 100001;
+    display: none;
+  }
 `;
+document.head.appendChild(extraStyles);
 
-document.head.appendChild(customStyles);
+// ==========================================
+// PRODUCT DISPLAY
+// ==========================================
 
-/* CUSTOMIZATION WINDOW */
+function renderProducts() {
+  const container = document.getElementById("products");
+  if (!container) return;
 
-const customizerRoot = document.createElement("div");
-document.body.appendChild(customizerRoot);
-
-let activeCustomization = null;
-
-const colors = [
-  "Pink","Purple","Blue","Yellow","Green",
-  "White","Orange","Red","Black"
-];
-
-function choiceGroup(title, field, options){
-  return `
-    <section class="customizer-section">
-      <h3>${title}</h3>
-      <div class="customizer-options">
-        ${options.map(option => `
-          <button
-            type="button"
-            class="choice-btn"
-            data-field="${field}"
-            data-value="${option}"
-            aria-pressed="false"
-          >${option}</button>
-        `).join("")}
-      </div>
-    </section>
-  `;
+  container.innerHTML = products.map(product => `
+    <div class="product-card">
+      <div class="product-emoji">${product.emoji}</div>
+      <h3>${product.name}</h3>
+      <p>${product.description}</p>
+      <p><strong>${money(product.price)}</strong></p>
+      <button onclick="add(${product.id})">Add to Cart</button>
+    </div>
+  `).join("");
 }
 
-function openCustomizer(productId){
-  let config;
+// ==========================================
+// CUSTOMIZATION POP-UP WITH CLICKABLE BUTTONS
+// ==========================================
 
-  if(productId === 2){
-    config = {
-      title:"🎨 Custom Squishy",
-      name:"Custom Squishy",
-      price:10,
-      emoji:"🎨",
-      fields:["color","air","crunchyBeads"],
-      sections:
-        choiceGroup("🎨 Choose your color","color",colors) +
-        choiceGroup("💨 Choose air or no air","air",["Air","No Air"]) +
-        choiceGroup("✨ Crunchy beads (FREE!)","crunchyBeads",["Yes","No"])
-    };
+let selectedProduct = null;
+let selections = {};
+
+function openCustomizer(id) {
+  selectedProduct = products.find(p => p.id === id);
+  if (!selectedProduct) return;
+
+  selections = {};
+
+  let options = "";
+
+  if (id === 1) {
+    options = `
+      <h3>🎨 Choose a color</h3>
+      ${choiceButtons("color", ["Pink", "Purple", "Blue", "Green", "Yellow", "Red", "Orange", "Black", "White", "Surprise me!"])}
+
+      <h3>💨 Air or no air?</h3>
+      ${choiceButtons("air", ["Air", "No Air"])}
+
+      <h3>✨ Crunchy beads?</h3>
+      ${choiceButtons("beads", ["Yes", "No"])}
+    `;
   }
 
-  if(productId === 4){
-    config = {
-      title:"✨ Custom Fidget",
-      name:"Custom Fidget",
-      price:6,
-      emoji:"✨",
-      fields:["color","type"],
-      sections:
-        choiceGroup("🎨 Choose your color","color",colors) +
-        choiceGroup("✨ Choose your fidget type","type",[
-          "Keychain","Sliding Marble Fidget"
-        ])
-    };
+  if (id === 3) {
+    options = `
+      <h3>🎨 Choose a color</h3>
+      ${choiceButtons("color", ["Pink", "Purple", "Blue", "Green", "Yellow", "Red", "Orange", "Black", "White", "Surprise me!"])}
+
+      <h3>✨ Choose your fidget type</h3>
+      ${choiceButtons("type", ["Keychain", "Sliding Marble Fidget"])}
+    `;
   }
 
-  if(productId === 5){
-    config = {
-      title:"🎈 Balloon Squishy",
-      name:"Balloon Squishy",
-      price:7,
-      emoji:"🎈",
-      fields:["filling"],
-      sections:
-        choiceGroup("🎈 Choose your filling","filling",[
-          "Soft Kinetic Sand","Gel","Water"
-        ])
-    };
+  if (id === 4) {
+    options = `
+      <h3>🎈 Choose your filling</h3>
+      ${choiceButtons("filling", ["Soft Kinetic Sand", "Gel", "Water"])}
+    `;
   }
 
-  if(!config)return;
-
-  activeCustomization = {
-    ...config,
-    productId,
-    selected:{}
-  };
-
-  renderCustomizer();
-}
-
-function renderCustomizer(){
-  const config = activeCustomization;
-
-  if(!config)return;
-
-  customizerRoot.innerHTML = `
-    <div class="customizer-backdrop">
-      <div class="customizer-box" role="dialog" aria-modal="true">
-        <div class="customizer-heading">
-          <h2>${config.title}</h2>
-          <button type="button" class="customizer-close" data-action="close">×</button>
-        </div>
-
-        ${config.sections}
-
-        <button
-          type="button"
-          class="customizer-add"
-          data-action="add"
-          disabled
-        >
-          Add to Cart 💕
-        </button>
-
-        <p class="customizer-note">
-          Choose all your options before adding to your cart!
-        </p>
+  const modal = document.getElementById("squishCustomizer");
+  modal.innerHTML = `
+    <div class="customizer-box" onclick="event.stopPropagation()">
+      <h2>${selectedProduct.emoji} Customize Your ${selectedProduct.name}</h2>
+      ${options}
+      <div class="customizer-actions">
+        <button class="custom-cancel" onclick="closeCustomizer()">Cancel</button>
+        <button class="custom-add" onclick="finishCustomization()">Add to Cart 💗</button>
       </div>
     </div>
   `;
 
-  updateCustomizer();
+  modal.classList.add("show");
 }
 
-function updateCustomizer(){
-  if(!activeCustomization)return;
+function choiceButtons(key, choices) {
+  return `
+    <div class="choice-grid">
+      ${choices.map(choice => `
+        <button
+          type="button"
+          class="choice-btn"
+          onclick="selectChoice('${key}', '${choice.replace(/'/g, "\\'")}', this)"
+        >${choice}</button>
+      `).join("")}
+    </div>
+  `;
+}
 
-  const config = activeCustomization;
+function selectChoice(key, value, button) {
+  selections[key] = value;
 
-  customizerRoot.querySelectorAll(".choice-btn").forEach(button => {
-    const selected =
-      config.selected[button.dataset.field] === button.dataset.value;
-
-    button.classList.toggle("selected",selected);
-    button.setAttribute("aria-pressed",String(selected));
+  const group = button.parentElement;
+  group.querySelectorAll(".choice-btn").forEach(btn => {
+    btn.classList.remove("selected");
   });
 
-  const complete = config.fields.every(field =>
-    Boolean(config.selected[field])
-  );
-
-  const addButton = customizerRoot.querySelector('[data-action="add"]');
-
-  if(addButton){
-    addButton.disabled = !complete;
-  }
+  button.classList.add("selected");
 }
 
-/* CLICKABLE CUSTOMIZATION OPTIONS */
+function closeCustomizer() {
+  document.getElementById("squishCustomizer").classList.remove("show");
+}
 
-customizerRoot.addEventListener("click",event => {
-  const closeButton = event.target.closest('[data-action="close"]');
+function finishCustomization() {
+  if (!selectedProduct) return;
 
-  if(closeButton){
-    activeCustomization = null;
-    customizerRoot.innerHTML = "";
-    return;
-  }
-
-  if(event.target.classList.contains("customizer-backdrop")){
-    activeCustomization = null;
-    customizerRoot.innerHTML = "";
-    return;
-  }
-
-  const choiceButton = event.target.closest(".choice-btn");
-
-  if(choiceButton && activeCustomization){
-    const field = choiceButton.dataset.field;
-    const value = choiceButton.dataset.value;
-
-    activeCustomization.selected[field] = value;
-    updateCustomizer();
-    return;
-  }
-
-  const addButton = event.target.closest('[data-action="add"]');
-
-  if(addButton && activeCustomization){
-    finishCustomization();
-  }
-});
-
-/* ADD CUSTOMIZED PRODUCT */
-
-function finishCustomization(){
-  const config = activeCustomization;
-
-  if(!config)return;
-
-  const complete = config.fields.every(field =>
-    Boolean(config.selected[field])
-  );
-
-  if(!complete)return;
-
-  const customItem = {
-    id:Date.now() + Math.floor(Math.random()*1000),
-    baseId:config.productId,
-    name:config.name,
-    price:config.price,
-    emoji:config.emoji,
-    qty:1,
-    customization:{...config.selected}
+  const required = {
+    1: ["color", "air", "beads"],
+    3: ["color", "type"],
+    4: ["filling"]
   };
 
-  cart.push(customItem);
-  save();
+  const missing = (required[selectedProduct.id] || []).filter(key => !selections[key]);
 
-  activeCustomization = null;
-  customizerRoot.innerHTML = "";
+  if (missing.length) {
+    showToast("Please choose all the options first! 💗");
+    return;
+  }
 
-  toast(config.name + " added to your cart! 💕");
+  cart.push({
+    id: selectedProduct.id,
+    name: selectedProduct.name,
+    price: selectedProduct.price,
+    emoji: selectedProduct.emoji,
+    customizations: { ...selections }
+  });
+
+  saveCart();
+  updateCart();
+  closeCustomizer();
+  showToast("Added to your cart! 💗");
 }
 
-/* ADD PRODUCTS */
+// ==========================================
+// ADD PRODUCTS TO CART
+// ==========================================
 
-function add(id){
-  const product = products.find(item => item.id === id);
+function add(id) {
+  const product = products.find(p => p.id === id);
+  if (!product) return;
 
-  if(!product)return;
-
-  if([2,4,5].includes(id)){
+  if ([1, 3, 4].includes(id)) {
     openCustomizer(id);
     return;
   }
 
-  const existing = cart.find(item =>
-    item.id === id && !item.customization
-  );
+  cart.push({
+    id: product.id,
+    name: product.name,
+    price: product.price,
+    emoji: product.emoji,
+    customizations: {}
+  });
 
-  if(existing){
-    existing.qty++;
-  }else{
-    cart.push({...product,qty:1});
-  }
-
-  save();
-  toast("Added to your cart! 💕");
+  saveCart();
+  updateCart();
+  showToast("Added to your cart! 💗");
 }
 
-/* CHANGE QUANTITY */
+// ==========================================
+// CART DISPLAY
+// ==========================================
 
-function change(id,delta){
-  const item = cart.find(item => item.id === id);
+function updateCart() {
+  const count = cart.length;
+  const total = cart.reduce((sum, item) => sum + item.price, 0);
 
-  if(!item)return;
+  const countElement = document.getElementById("cartCount");
+  const totalElement = document.getElementById("cartTotal");
+  const checkoutTotal = document.getElementById("checkoutTotal");
+  const itemsElement = document.getElementById("cartItems");
 
-  item.qty += delta;
+  if (countElement) countElement.textContent = count;
+  if (totalElement) totalElement.textContent = money(total);
+  if (checkoutTotal) checkoutTotal.textContent = money(total);
 
-  if(item.qty <= 0){
-    cart = cart.filter(item => item.id !== id);
-  }
+  if (itemsElement) {
+    if (!cart.length) {
+      itemsElement.innerHTML = "<p>Your cart is empty! 🥺</p>";
+    } else {
+      itemsElement.innerHTML = cart.map((item, index) => {
+        const details = Object.entries(item.customizations || {})
+          .map(([key, value]) => `${key}: ${value}`)
+          .join(" • ");
 
-  save();
-}
-
-/* DISPLAY PRODUCTS */
-
-function renderProducts(){
-  const productArea = $("products");
-
-  if(!productArea)return;
-
-  productArea.innerHTML = products.map(product => `
-    <article class="product">
-
-      <div class="product-art ${product.art}">
-        ${product.emoji}
-      </div>
-
-      <h3>${product.name}</h3>
-
-      <p>${product.desc}</p>
-
-      <div class="product-bottom">
-
-        <span class="price">
-          ${money(product.price)}
-        </span>
-
-        <button class="add" onclick="add(${product.id})">
-          ${[2,4,5].includes(product.id) ? "Customize 💕" : "Add +"}
-        </button>
-
-      </div>
-
-    </article>
-  `).join("");
-}
-
-/* DISPLAY CART */
-
-function renderCart(){
-  const cartCount = $("cartCount");
-  const cartTotal = $("cartTotal");
-  const checkoutTotal = $("checkoutTotal");
-  const cartItems = $("cartItems");
-  const checkoutButton = $("checkoutButton");
-
-  if(!cartCount || !cartTotal || !checkoutTotal || !cartItems)return;
-
-  const count = cart.reduce((sum,item)=>sum+item.qty,0);
-
-  const total = cart.reduce(
-    (sum,item)=>sum+item.price*item.qty,0
-  );
-
-  cartCount.textContent = count;
-  cartTotal.textContent = money(total);
-  checkoutTotal.textContent = money(total);
-
-  cartItems.innerHTML = cart.length
-    ? cart.map(item => `
-      <div class="cart-item">
-
-        <div>
-          <strong>
-            ${escapeHTML(item.emoji)} ${escapeHTML(item.name)}
-          </strong>
-
-          <div>${money(item.price)} each</div>
-
-          ${
-            item.customization
-            ? `
-              <div>
-                ${
-                  item.customization.color
-                  ? `🎨 Color: ${escapeHTML(item.customization.color)}<br>`
-                  : ""
-                }
-
-                ${
-                  item.customization.air
-                  ? `💨 ${escapeHTML(item.customization.air)}<br>`
-                  : ""
-                }
-
-                ${
-                  item.customization.crunchyBeads
-                  ? `✨ Crunchy Beads: ${escapeHTML(item.customization.crunchyBeads)}<br>`
-                  : ""
-                }
-
-                ${
-                  item.customization.filling
-                  ? `🎈 Filling: ${escapeHTML(item.customization.filling)}<br>`
-                  : ""
-                }
-
-                ${
-                  item.customization.type
-                  ? `🫧 Type: ${escapeHTML(item.customization.type)}`
-                  : ""
-                }
-              </div>
-            `
-            : ""
-          }
-        </div>
-
-        <div class="qty">
-          <button onclick="change(${item.id},-1)">−</button>
-          <span>${item.qty}</span>
-          <button onclick="change(${item.id},1)">+</button>
-        </div>
-
-      </div>
-    `).join("")
-    : `<p>Your cart is empty. Add a squishy to get started! 🧸</p>`;
-
-  if(checkoutButton){
-    checkoutButton.disabled = !cart.length;
+        return `
+          <div class="cart-line">
+            <strong>${item.emoji} ${item.name}</strong>
+            <span> - ${money(item.price)}</span>
+            ${details ? `<p>${details}</p>` : ""}
+            <button onclick="removeItem(${index})">Remove</button>
+          </div>
+        `;
+      }).join("");
+    }
   }
 }
 
-/* TOAST MESSAGE */
-
-function toast(message){
-  const t = $("toast");
-
-  if(!t)return;
-
-  t.textContent = message;
-  t.classList.add("show");
-
-  setTimeout(()=>{
-    t.classList.remove("show");
-  },1800);
+function removeItem(index) {
+  cart.splice(index, 1);
+  saveCart();
+  updateCart();
+  showToast("Removed from cart");
 }
 
-/* CART BUTTONS */
+// ==========================================
+// CART AND CHECKOUT WINDOWS
+// ==========================================
 
-$("cartButton")?.addEventListener("click",()=>{
-  $("cartOverlay")?.classList.add("open");
+function openCart() {
+  const overlay = document.getElementById("cartOverlay");
+  if (overlay) {
+    overlay.style.display = "flex";
+    overlay.classList.add("active");
+  }
+}
+
+function closeCartWindow() {
+  const overlay = document.getElementById("cartOverlay");
+  if (overlay) {
+    overlay.style.display = "none";
+    overlay.classList.remove("active");
+  }
+}
+
+function openCheckout() {
+  if (!cart.length) {
+    showToast("Your cart is empty! 💗");
+    return;
+  }
+
+  closeCartWindow();
+
+  const overlay = document.getElementById("checkoutOverlay");
+  if (overlay) {
+    overlay.style.display = "flex";
+    overlay.classList.add("active");
+  }
+}
+
+function closeCheckoutWindow() {
+  const overlay = document.getElementById("checkoutOverlay");
+  if (overlay) {
+    overlay.style.display = "none";
+    overlay.classList.remove("active");
+  }
+}
+
+// ==========================================
+// TOAST MESSAGE
+// ==========================================
+
+function showToast(message) {
+  let toast = document.getElementById("squishToast");
+
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "squishToast";
+    document.body.appendChild(toast);
+  }
+
+  toast.textContent = message;
+  toast.style.display = "block";
+
+  clearTimeout(window.squishToastTimer);
+  window.squishToastTimer = setTimeout(() => {
+    toast.style.display = "none";
+  }, 2500);
+}
+
+// ==========================================
+// CONNECT WEBSITE BUTTONS
+// ==========================================
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderProducts();
+  updateCart();
+
+  const cartButton = document.getElementById("cartButton");
+  const closeCart = document.getElementById("closeCart");
+  const checkoutButton = document.getElementById("checkoutButton");
+  const closeCheckout = document.getElementById("closeCheckout");
+
+  if (cartButton) cartButton.addEventListener("click", openCart);
+  if (closeCart) closeCart.addEventListener("click", closeCartWindow);
+  if (checkoutButton) checkoutButton.addEventListener("click", openCheckout);
+  if (closeCheckout) closeCheckout.addEventListener("click", closeCheckoutWindow);
+
+  const cartOverlay = document.getElementById("cartOverlay");
+  if (cartOverlay) {
+    cartOverlay.addEventListener("click", event => {
+      if (event.target === cartOverlay) closeCartWindow();
+    });
+  }
+
+  const checkoutOverlay = document.getElementById("checkoutOverlay");
+  if (checkoutOverlay) {
+    checkoutOverlay.addEventListener("click", event => {
+      if (event.target === checkoutOverlay) closeCheckoutWindow();
+    });
+  }
+
+  const checkoutForm = document.getElementById("checkoutForm");
+  if (checkoutForm) {
+    checkoutForm.addEventListener("submit", event => {
+      event.preventDefault();
+      showToast("Checkout isn't connected to payments yet. Ask your dad to finish Stripe setup! 💗");
+    });
+  }
+
+  // Create the customization window
+  const modal = document.createElement("div");
+  modal.id = "squishCustomizer";
+  modal.className = "customizer";
+  modal.addEventListener("click", event => {
+    if (event.target === modal) closeCustomizer();
+  });
+  document.body.appendChild(modal);
 });
 
-$("closeCart")?.addEventListener("click",()=>{
-  $("cartOverlay")?.classList.remove("open");
-});
-
-/* CHECKOUT BUTTONS */
-
-$("checkoutButton")?.addEventListener("click",()=>{
-  if(!cart.length)return;
-
-  $("cartOverlay")?.classList.remove("open");
-  $("checkoutOverlay")?.classList.add("open");
-});
-
-$("closeCheckout")?.addEventListener("click",()=>{
-  $("checkoutOverlay")?.classList.remove("open");
-});
-
-/* CHECKOUT FORM */
-
-$("checkoutForm")?.addEventListener("submit",event=>{
-  event.preventDefault();
-
-  alert(
-    "This is a demo checkout. No payment was taken. Real payment processing still needs to be connected."
-  );
-});
-
-/* START WEBSITE */
-
-renderProducts();
-renderCart();
+// Make functions available to the product buttons
+window.add = add;
+window.removeItem = removeItem;
+window.openCustomizer = openCustomizer;
+window.selectChoice = selectChoice;
+window.finishCustomization = finishCustomization;
+window.closeCustomizer = closeCustomizer;
+window.openCart = openCart;
+window.closeCartWindow = closeCartWindow;
+window.openCheckout = openCheckout;
+window.closeCheckoutWindow = closeCheckoutWindow;
