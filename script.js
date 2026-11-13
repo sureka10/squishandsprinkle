@@ -590,4 +590,3 @@ $("checkoutForm")?.addEventListener("submit",event=>{
 
 renderProducts();
 renderCart();
-
