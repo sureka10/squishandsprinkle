@@ -7,12 +7,13 @@ const products=[
   {id:6,name:"DIY Dumpling",price:8,emoji:"🥟",art:"p6",desc:"A fun DIY dumpling squishy."}
 ];
 
-let cart=JSON.parse(localStorage.getItem("squishCart")||"[]");
+let cart=JSON.parse(localStorage.getItem("squishCart")||"[]")
+  .filter(item=>item.baseId!==1 && item.id!==1);
 
 const $=id=>document.getElementById(id);
 
 function money(n){
-  return "$"+n.toFixed(2);
+  return "$"+Number(n).toFixed(2);
 }
 
 function save(){
@@ -25,20 +26,9 @@ function add(id){
   const p=products.find(x=>x.id===id);
   if(!p)return;
 
-  if(id===2){
-    customizeSquishy();
-    return;
-  }
-
-  if(id===4){
-    customizeFidget();
-    return;
-  }
-
-  if(id===5){
-    customizeBalloon();
-    return;
-  }
+  if(id===2){customizeSquishy();return;}
+  if(id===4){customizeFidget();return;}
+  if(id===5){customizeBalloon();return;}
 
   const item=cart.find(x=>x.id===id);
 
@@ -57,24 +47,18 @@ function customizeSquishy(){
   const color=prompt(
     "🎨 Choose a color:\n\nPink\nPurple\nBlue\nYellow\nGreen\nWhite\nOrange"
   );
-  if(!color)return;
+  if(!color || !color.trim())return;
 
   const airChoice=prompt(
     "💨 Choose one:\n\nAir\nNo Air"
   );
-  if(!airChoice)return;
+  if(!airChoice || !airChoice.trim())return;
 
-  const beadsChoice=prompt(
-    "✨ Crunchy beads are included FREE!\n\nWould you like crunchy beads?\n\nYes\nNo"
+  const addBeads=confirm(
+    "✨ Crunchy beads are FREE!\n\nWould you like crunchy beads?\n\nClick OK for YES or Cancel for NO."
   );
-  if(!beadsChoice)return;
 
-  if(!["yes","no"].includes(beadsChoice.trim().toLowerCase())){
-    alert("Please choose Yes or No.");
-    return;
-  }
-
-  const customItem={
+  cart.push({
     id:Date.now(),
     baseId:2,
     name:"Custom Squishy",
@@ -82,13 +66,12 @@ function customizeSquishy(){
     emoji:"🎨",
     qty:1,
     customization:{
-      color:color,
-      air:airChoice,
-      crunchyBeads:beadsChoice.trim().toLowerCase()==="yes"?"Yes":"No"
+      color:color.trim(),
+      air:airChoice.trim(),
+      crunchyBeads:addBeads?"Yes":"No"
     }
-  };
+  });
 
-  cart.push(customItem);
   save();
   toast("Custom Squishy added! 🎀");
 }
@@ -96,9 +79,9 @@ function customizeSquishy(){
 /* CUSTOM FIDGET */
 function customizeFidget(){
   const color=prompt(
-    "🎨 What color would you like for your Custom Fidget?\n\nYou can choose ANY color!"
+    "🎨 What color would you like?\n\nYou can choose ANY color!"
   );
-  if(!color)return;
+  if(!color || !color.trim())return;
 
   const type=prompt(
     "✨ Choose your fidget type:\n\n1. Keychain\n2. Sliding Marble Fidget"
@@ -107,18 +90,16 @@ function customizeFidget(){
 
   let fidgetType;
 
-  if(type==="1" || type.toLowerCase()==="keychain"){
+  if(type==="1" || type.toLowerCase().trim()==="keychain"){
     fidgetType="Keychain";
-  }
-  else if(type==="2" || type.toLowerCase()==="sliding marble fidget"){
+  }else if(type==="2" || type.toLowerCase().trim()==="sliding marble fidget"){
     fidgetType="Sliding Marble Fidget";
-  }
-  else{
-    alert("Please choose Keychain or Sliding Marble Fidget.");
+  }else{
+    alert("Please choose 1 or 2.");
     return;
   }
 
-  const customItem={
+  cart.push({
     id:Date.now(),
     baseId:4,
     name:"Custom Fidget",
@@ -126,12 +107,11 @@ function customizeFidget(){
     emoji:"✨",
     qty:1,
     customization:{
-      color:color,
+      color:color.trim(),
       type:fidgetType
     }
-  };
+  });
 
-  cart.push(customItem);
   save();
   toast("Custom Fidget added! ✨");
 }
@@ -139,27 +119,24 @@ function customizeFidget(){
 /* BALLOON SQUISHY */
 function customizeBalloon(){
   const filling=prompt(
-    "🎈 Choose your Balloon Squishy filling:\n\n1. Soft Kinetic Sand\n2. Gel\n3. Water"
+    "🎈 Choose your filling:\n\n1. Soft Kinetic Sand\n2. Gel\n3. Water"
   );
   if(!filling)return;
 
   let selectedFilling;
 
-  if(filling==="1" || filling.toLowerCase()==="soft kinetic sand"){
+  if(filling==="1" || filling.toLowerCase().trim()==="soft kinetic sand"){
     selectedFilling="Soft Kinetic Sand";
-  }
-  else if(filling==="2" || filling.toLowerCase()==="gel"){
+  }else if(filling==="2" || filling.toLowerCase().trim()==="gel"){
     selectedFilling="Gel";
-  }
-  else if(filling==="3" || filling.toLowerCase()==="water"){
+  }else if(filling==="3" || filling.toLowerCase().trim()==="water"){
     selectedFilling="Water";
-  }
-  else{
+  }else{
     alert("Please choose 1, 2, or 3.");
     return;
   }
 
-  const customItem={
+  cart.push({
     id:Date.now(),
     baseId:5,
     name:"Balloon Squishy",
@@ -169,9 +146,8 @@ function customizeBalloon(){
     customization:{
       filling:selectedFilling
     }
-  };
+  });
 
-  cart.push(customItem);
   save();
   toast("Balloon Squishy added! 🎈");
 }
@@ -194,22 +170,13 @@ function change(id,delta){
 function renderProducts(){
   $("products").innerHTML=products.map(p=>`
     <article class="product">
-      <div class="product-art ${p.art}">
-        ${p.emoji}
-      </div>
-
+      <div class="product-art ${p.art}">${p.emoji}</div>
       <h3>${p.name}</h3>
       <p>${p.desc}</p>
-
       <div class="product-bottom">
         <span class="price">${money(p.price)}</span>
-
         <button class="add" onclick="add(${p.id})">
-          ${
-            [2,4,5].includes(p.id)
-            ? "Customize 💕"
-            : "Add +"
-          }
+          ${[2,4,5].includes(p.id)?"Customize 💕":"Add +"}
         </button>
       </div>
     </article>
@@ -226,35 +193,31 @@ function renderCart(){
   $("checkoutTotal").textContent=money(total);
 
   $("cartItems").innerHTML=cart.length
-  ?cart.map(x=>`
-    <div class="cart-item">
-      <div>
-        <strong>${x.emoji} ${x.name}</strong>
-        <div>${money(x.price)} each</div>
-
-        ${
-          x.customization
-          ?`
-            <div>
-              ${x.customization.color?`🎨 Color: ${x.customization.color}<br>`:""}
-              ${x.customization.air?`💨 ${x.customization.air}<br>`:""}
-              ${x.customization.crunchyBeads?`✨ Crunchy Beads: ${x.customization.crunchyBeads}<br>`:""}
-              ${x.customization.filling?`🎈 Filling: ${x.customization.filling}<br>`:""}
-              ${x.customization.type?`🫧 Type: ${x.customization.type}`:""}
-            </div>
-          `
-          :""
-        }
+    ?cart.map(x=>`
+      <div class="cart-item">
+        <div>
+          <strong>${x.emoji} ${x.name}</strong>
+          <div>${money(x.price)} each</div>
+          ${
+            x.customization?`
+              <div>
+                ${x.customization.color?`🎨 Color: ${x.customization.color}<br>`:""}
+                ${x.customization.air?`💨 ${x.customization.air}<br>`:""}
+                ${x.customization.crunchyBeads?`✨ Crunchy Beads: ${x.customization.crunchyBeads}<br>`:""}
+                ${x.customization.filling?`🎈 Filling: ${x.customization.filling}<br>`:""}
+                ${x.customization.type?`🫧 Type: ${x.customization.type}`:""}
+              </div>
+            `:""
+          }
+        </div>
+        <div class="qty">
+          <button onclick="change(${x.id},-1)">−</button>
+          <span>${x.qty}</span>
+          <button onclick="change(${x.id},1)">+</button>
+        </div>
       </div>
-
-      <div class="qty">
-        <button onclick="change(${x.id},-1)">−</button>
-        <span>${x.qty}</span>
-        <button onclick="change(${x.id},1)">+</button>
-      </div>
-    </div>
-  `).join("")
-  :`<p>Your cart is empty. Add a squishy to get started! 🧸</p>`;
+    `).join("")
+    :`<p>Your cart is empty. Add a squishy to get started! 🧸</p>`;
 
   $("checkoutButton").disabled=!cart.length;
 }
@@ -264,11 +227,10 @@ function toast(msg){
   const t=$("toast");
   t.textContent=msg;
   t.classList.add("show");
-
   setTimeout(()=>t.classList.remove("show"),1800);
 }
 
-/* CART BUTTON */
+/* CART BUTTONS */
 $("cartButton").onclick=()=>{
   $("cartOverlay").classList.add("open");
 };
@@ -280,7 +242,6 @@ $("closeCart").onclick=()=>{
 /* CHECKOUT */
 $("checkoutButton").onclick=()=>{
   if(!cart.length)return;
-
   $("cartOverlay").classList.remove("open");
   $("checkoutOverlay").classList.add("open");
 };
@@ -292,10 +253,7 @@ $("closeCheckout").onclick=()=>{
 /* CHECKOUT FORM */
 $("checkoutForm").onsubmit=e=>{
   e.preventDefault();
-
-  alert(
-    "This is a demo checkout. No payment was taken. Your dad will need to connect real payment processing before launch."
-  );
+  alert("This is a demo checkout. No payment was taken. Real payment processing still needs to be connected.");
 };
 
 /* START */
